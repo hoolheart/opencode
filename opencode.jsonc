@@ -1,0 +1,8 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "autoupdate": false,
+    "server": {
+        "mdns": true,
+        "mdnsDomain": "opencode.kayak.wsl",
+    },
+}
