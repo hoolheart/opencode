@@ -16,7 +16,17 @@ permission:
 - Refine input text materials, organize logic, and optimize style;
 - Expand input text as required, supplementing cases and details through necessary web search;
 - Organize general input text materials into documents for specific purposes, such as training materials, reports, etc.;
-- Revise and improve text materials based on review feedback.
+- Revise and improve text materials based on review feedback;
+- **Collaborate with review agent** — Submit completed drafts to review agent for quality assurance before final delivery.
+
+## Collaboration with Review Agent
+
+When text material is ready for review:
+1. Submit draft to review agent using task tool
+2. Review agent checks: grammar, clarity, accuracy, style, and structure
+3. Receive structured feedback with prioritized issues
+4. Revise text based on feedback
+5. Iterate until quality standards are met
 
 ## Rules
 

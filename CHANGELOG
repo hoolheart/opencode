@@ -1,0 +1,250 @@
+2026-02-18
+----------
+
+## Overview
+Established complete Rust + Flutter software development agent ecosystem with 1 primary agent and 6 subagents, enabling full product lifecycle management from requirements to delivery.
+
+## Technical Stack
+- **Backend**: Rust
+- **Frontend**: Flutter (iOS, Android, Web, Desktop)
+- **Architecture**: Multi-agent orchestration system
+
+## Agents Created
+
+### 1. product (PRIMARY AGENT)
+**File**: `agents/product.md` (684 lines)
+**Mode**: primary | **Temperature**: 0.3 | **Steps**: 50
+
+**Responsibilities**:
+1. Collect and verify software product requirements with user
+2. Verify feasibility with architect subagent
+3. Create Product Requirements Document (PRD)
+4. Call architect to design software architecture and decompose tasks
+5. Setup development plan according to task decomposition
+6. Distribute tasks to development subagents (rust_dev, flutter_dev, ui_dev)
+7. Enforce quality gates: test before code review, architect review before merge
+8. Coordinate final product testing with test subagent
+9. Manage bug fixes with development subagents
+10. Deliver final product to user
+
+**Integration Flow**:
+```
+User → product → architect/rust_dev/flutter_dev/ui_dev → test → Delivery
+```
+
+---
+
+### 2. architect (Subagent)
+**File**: `agents/architect.md`
+**Mode**: subagent | **Temperature**: 0.3
+
+**Responsibilities**:
+- Design Rust + Flutter software architecture
+- Provide technical feasibility analysis
+- Decompose architecture into design tasks with interfaces and acceptance criteria
+- Review code submissions and reject unreasonable designs
+- Arbitrate conflicts between development and testing
+
+**Key Features**:
+- Architecture design documents
+- Task decomposition with interface definitions
+- Code review reports
+- Arbitration decisions
+
+---
+
+### 3. rust_dev (Subagent)
+**File**: `agents/rust_dev.md` (304 lines)
+**Mode**: subagent | **Temperature**: 0.2
+
+**Responsibilities**:
+- Write idiomatic, safe, and performant Rust code
+- Implement comprehensive testing (unit, integration, documentation tests)
+- FFI integration with Flutter via flutter_rust_bridge
+- Cross-platform development (iOS, Android, Windows, macOS, Linux)
+- Code quality enforcement (cargo fmt, clippy)
+- Concurrency and async programming
+
+**Key Features**:
+- Follows rust-guidelines.md
+- FFI & Flutter integration support
+- Cross-platform compilation
+- Concurrency best practices
+- Error handling standards
+
+---
+
+### 4. flutter_dev (Subagent)
+**File**: `agents/flutter_dev.md` (~580 lines)
+**Mode**: subagent | **Temperature**: 0.2
+
+**Responsibilities**:
+- Implement responsive and accessible Flutter UI
+- State management (BLoC, Provider, Riverpod, etc.)
+- FFI integration with Rust using flutter_rust_bridge
+- Cross-platform development (iOS, Android, Web, Desktop)
+- Code quality (flutter analyze, dart format)
+- Navigation & routing (GoRouter)
+- Localization & accessibility
+
+**Integration with ui_dev**:
+- Explicit calling procedures for UI design tasks
+- Design-to-code handoff workflow
+- Design token implementation
+
+**Key Features**:
+- Follows flutter-guidelines.md
+- Material Design 3 / Cupertino support
+- FFI error handling
+- Responsive layouts
+- Complete testing workflow
+
+---
+
+### 5. ui_dev (Subagent)
+**File**: `agents/ui_dev.md` (~620 lines)
+**Mode**: subagent | **Temperature**: 0.2
+
+**Responsibilities**:
+- Create comprehensive design systems
+- Define visual design specifications for Flutter widgets
+- Design token management (colors, typography, spacing)
+- Component library design (Material Design 3)
+- Accessibility & UX guidelines (WCAG 2.1 AA)
+- Design-to-code handoff documentation
+
+**Key Features**:
+- Follows color-guidelines.md and figma-guidelines.md
+- WCAG 2.1 AA compliance
+- Light/Dark mode design
+- 8px baseline spacing system
+- ThemeData configurations
+- Flutter-specific implementation guidance
+
+---
+
+### 6. test (Subagent)
+**File**: `agents/test.md` (~745 lines)
+**Mode**: subagent | **Temperature**: 0.2
+
+**Responsibilities** (Black-box testing focus):
+- Create test cases based on requirements ONLY (no code review)
+- Functional testing from user perspective
+- Integration testing (Rust-Flutter FFI)
+- Cross-platform testing
+- Regression testing
+- Bug reporting with reproduction steps
+- Test documentation and traceability matrices
+
+**Test Design Techniques**:
+- Equivalence Partitioning
+- Boundary Value Analysis
+- Decision Table Testing
+- State Transition Testing
+- Use Case Testing
+- Error Guessing
+
+**Key Features**:
+- Follows test-case-guidelines.md
+- Black-box testing principles
+- Comprehensive test templates
+- Defect report templates
+- Integration with all development agents
+
+---
+
+### 7. review (Subagent)
+**File**: `agents/review.md`
+**Mode**: subagent
+
+**Responsibilities**:
+- Review text materials for quality, accuracy, and style
+- Used during agent creation process
+- Provides structured feedback with prioritized issues
+
+---
+
+### 8. office (Subagent)
+**File**: `agents/office.md`
+**Mode**: subagent
+
+**Responsibilities**:
+- Handle office-related tasks
+- Document processing
+- General administrative support
+
+---
+
+## Quality Gates & Workflow
+
+### Development Workflow (Enforced by product agent):
+```
+1. Assign Task → Dev Subagent
+2. Development Complete
+3. Test Subagent → Tests Implementation
+   ├─ PASS → Code Review
+   └─ FAIL → Return to Developer
+4. Architect → Code Review
+   ├─ APPROVED → Merge
+   └─ CHANGES → Return to Developer
+5. Task Complete
+```
+
+### Bug Fix Workflow:
+```
+1. Review test report with user
+2. Prioritize bugs (Critical/High/Medium/Low)
+3. Assign to appropriate subagent
+4. Fix → Test → Review → Close
+5. Re-run regression tests
+6. User validation
+```
+
+## Project Structure
+
+```
+~/.config/opencode/
+├── agents/
+│   ├── product.md          # Primary orchestrator (NEW)
+│   ├── architect.md        # Architecture design
+│   ├── rust_dev.md         # Rust development
+│   ├── flutter_dev.md      # Flutter development
+│   ├── ui_dev.md           # UI/UX design
+│   ├── test.md             # Black-box testing
+│   ├── review.md           # Review agent
+│   └── office.md           # Office tasks
+├── rules/
+│   ├── rust-guidelines.md
+│   ├── flutter-guidelines.md
+│   ├── color-guidelines.md
+│   ├── figma-guidelines.md
+│   ├── test-case-guidelines.md
+│   ├── prd-guidelines-en.md
+│   └── ...
+└── CHANGELOG
+```
+
+## Statistics
+
+| Metric | Count |
+|--------|-------|
+| **Total Agents** | 8 (1 primary + 7 subagents) |
+| **New Agents** | 6 (product, architect, rust_dev, flutter_dev, ui_dev, test) |
+| **Total Lines** | ~3,500+ lines of agent definitions |
+| **Review Iterations** | 4 comprehensive reviews |
+
+## Usage
+
+To start a software project:
+1. Call **product** agent with initial requirements
+2. Product agent will coordinate all subagents automatically
+3. User receives regular progress updates
+4. Final product delivered with documentation
+
+## Notes
+
+- All agents follow consistent structure and naming conventions
+- Temperature standardized to 0.2 for subagents (0.3 for primary)
+- Each agent references relevant guidelines files
+- Complete integration workflows documented
+- Review-driven development process applied

@@ -3,6 +3,6 @@
     "autoupdate": false,
     "server": {
         "mdns": true,
-        "mdnsDomain": "opencode.kayak.wsl",
+        "mdnsDomain": "opencode.kayak.local",
     },
 }
