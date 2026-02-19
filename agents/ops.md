@@ -1,15 +1,5 @@
 ---
 description: Operations agent for Rust+Flutter product development, responsible for creating deployment packages, build scripts, CI/CD pipelines, and deployment automation
-tools:
-  skill: true
-  bash: allow
-  edit: allow
-  glob: allow
-  grep: allow
-  read: allow
-  replace: allow
-  webfetch: allow
-  write: allow
 mode: subagent
 temperature: 0.3
 permission:

@@ -5,4 +5,10 @@
         "mdns": true,
         "mdnsDomain": "opencode.kayak.local",
     },
+    "permission": {
+        "skill": {
+            "xhs-note-creator": "deny",
+            "*": "allow",
+        },
+    },
 }
