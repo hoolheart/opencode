@@ -11,6 +11,7 @@ permission:
   bash: allow
   webfetch: allow
   skill:
+    "git-workflow": "allow"
     "*": "allow"
 ---
 
@@ -337,10 +338,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 @immutable
 class CounterState {
   const CounterState({required this.count, this.isLoading = false});
-  
+
   final int count;
   final bool isLoading;
-  
+
   CounterState copyWith({int? count, bool? isLoading}) {
     return CounterState(
       count: count ?? this.count,
@@ -352,7 +353,7 @@ class CounterState {
 // BLoC/Cubit
 class CounterCubit extends Cubit<CounterState> {
   CounterCubit() : super(const CounterState(count: 0));
-  
+
   void increment() => emit(state.copyWith(count: state.count + 1));
   void decrement() => emit(state.copyWith(count: state.count - 1));
 }
@@ -451,7 +452,7 @@ void main() {
           home: CounterWidget(),
         ),
       );
-      
+
       expect(find.text('0'), findsOneWidget);
       expect(find.text('1'), findsNothing);
     });
@@ -462,10 +463,10 @@ void main() {
           home: CounterWidget(),
         ),
       );
-      
+
       await tester.tap(find.byIcon(Icons.add));
       await tester.pump();
-      
+
       expect(find.text('1'), findsOneWidget);
       expect(find.text('0'), findsNothing);
     });
@@ -485,10 +486,10 @@ part 'result.freezed.dart';
 class Result<T> with _$Result<T> {
   const factory Result.success(T data) = _Success<T>;
   const factory Result.failure(String message, [StackTrace? stackTrace]) = _Failure<T>;
-  
+
   bool get isSuccess => this is _Success<T>;
   bool get isFailure => this is _Failure<T>;
-  
+
   T? get data => when(success: (d) => d, failure: (_, __) => null);
   String? get errorMessage => when(success: (_) => null, failure: (m, _) => m);
 }
@@ -498,7 +499,7 @@ class AppException implements Exception {
   const AppException(this.message, {this.code});
   final String message;
   final String? code;
-  
+
   @override
   String toString() => 'AppException[$code]: $message';
 }
@@ -525,25 +526,25 @@ class UserRepository {
 // Usage in BLoC/Cubit
 class UserCubit extends Cubit<UserState> {
   UserCubit({required this.repository}) : super(const UserState());
-  
+
   final UserRepository repository;
-  
+
   Future<void> loadUser(String id) async {
     emit(state.copyWith(isLoading: true, error: null));
-    
+
     final result = await repository.getUser(id);
-    
+
     result.when(
       success: (user) => emit(state.copyWith(
-        user: user, 
+        user: user,
         isLoading: false,
       )),
       failure: (message, stackTrace) {
         // Log error for debugging
         logger.e('Failed to load user', error: message, stackTrace: stackTrace);
-        
+
         emit(state.copyWith(
-          error: message, 
+          error: message,
           isLoading: false,
         ));
       },
@@ -562,18 +563,18 @@ class UserProfile extends StatelessWidget {
         if (state.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
-        
+
         if (state.error != null) {
           return ErrorWidget(
             message: state.error!,
             onRetry: () => context.read<UserCubit>().loadUser(),
           );
         }
-        
+
         if (state.user != null) {
           return UserDetails(user: state.user!);
         }
-        
+
         return const SizedBox.shrink();
       },
     );
@@ -589,6 +590,74 @@ class UserProfile extends StatelessWidget {
 - **ALWAYS** provide user-friendly error messages in UI layer
 - **USE** `rethrow` to preserve original stack trace when needed
 
+## Git Workflow Integration
+
+### Commit Requirements
+
+**MUST commit changes before requesting testing:**
+
+1. **Self-Only Changes**: Only commit changes made by flutter_dev agent itself
+2. **Conventional Commits**: Follow Conventional Commits specification
+3. **Pre-Test Commit**: Always commit before calling test agent
+4. **Commit Message Format**:
+   ```
+   type(scope): description
+
+   [optional body]
+
+   [optional footer(s)]
+   ```
+
+### Commit Workflow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  FLUTTER_DEV COMMIT WORKFLOW                                │
+├─────────────────────────────────────────────────────────────┤
+│  1. Complete implementation                                  │
+│     ↓                                                       │
+│  2. Run quality checks:                                      │
+│     - dart format .                                         │
+│     - flutter analyze                                       │
+│     - flutter test                                          │
+│     ↓                                                       │
+│  3. Stage only self-made changes:                            │
+│     git add [specific files changed by flutter_dev]         │
+│     ↓                                                       │
+│  4. Commit with descriptive message:                         │
+│     git commit -m "feat(ui): implement login screen"        │
+│     ↓                                                       │
+│  5. Call test agent for verification                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Commit Message Guidelines
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation only changes
+- `style`: Code style changes (formatting, missing semi-colons, etc)
+- `refactor`: Code change that neither fixes a bug nor adds a feature
+- `perf`: Performance improvement
+- `test`: Adding or correcting tests
+- `chore`: Changes to build process or auxiliary tools
+
+**Examples:**
+```bash
+git commit -m "feat(auth): implement login screen with form validation"
+git commit -m "fix(navigation): resolve deep linking issues on Android"
+git commit -m "refactor(state): migrate from Provider to Riverpod"
+git commit -m "test(widgets): add golden tests for button components"
+```
+
+### Branching Strategy
+
+- **Feature Branches**: Create feature branch for each task
+- **Branch Naming**: `feat/[feature-name]` or `fix/[bug-description]`
+- **No Direct Main Commits**: Always work on feature branches
+- **Merge via PR**: Request architect review before merging
+
 ## Skills
 
 ### Core Capabilities
@@ -597,6 +666,7 @@ class UserProfile extends StatelessWidget {
 - **flutter-state**: Implement state management (BLoC, Provider, Riverpod, etc.)
 - **flutter-test**: Write and execute widget tests, unit tests, and integration tests
 - **flutter-ffi**: Integrate with Rust libraries via flutter_rust_bridge
+- **git-workflow**: Execute git commands for commit, branching, and merge operations
 
 ### Knowledge References
 - Reference {file:rules/flutter-guidelines.md} for detailed coding conventions
@@ -604,6 +674,7 @@ class UserProfile extends StatelessWidget {
 - Use [Flutter documentation](https://docs.flutter.dev) for widget references
 - Consult [flutter_rust_bridge](https://cjycode.com/flutter_rust_bridge/) for FFI integration
 - Use [Dart Packages](https://pub.dev) for dependency management
+- Use skill({name: "git-workflow"}) for git operations guidance
 
 ### Platform-Specific Skills
 - Configure platform-specific settings (iOS Info.plist, Android AndroidManifest.xml)

@@ -11,6 +11,7 @@ permission:
   bash: allow
   webfetch: allow
   skill:
+    "git-workflow": "allow"
     "*": "allow"
 ---
 
@@ -192,7 +193,7 @@ use thiserror::Error;
 pub enum MyError {
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
-    
+
     #[error("Invalid input: {message}")]
     InvalidInput { message: String },
 }
@@ -228,10 +229,10 @@ async fn process_data(data: Arc<RwLock<Data>>) {
     let read_guard = data.read().await;
     let value = read_guard.get_value();
     drop(read_guard); // Explicitly drop before await
-    
+
     // Async operation
     process(value).await;
-    
+
     // Write lock - exclusive access
     let mut write_guard = data.write().await;
     write_guard.update(result);
@@ -258,9 +259,9 @@ use std::os::raw::{c_char, c_int};
 pub unsafe extern "C" fn process_data(input: *const c_char) -> *mut c_char {
     // SAFETY: Caller ensures input is valid null-terminated string
     let input_str = CStr::from_ptr(input).to_string_lossy();
-    
+
     let result = format!("Processed: {}", input_str);
-    
+
     // Return ownership to caller - must be freed by caller
     CString::new(result).unwrap().into_raw()
 }
@@ -284,18 +285,88 @@ pub unsafe extern "C" fn free_string(ptr: *mut c_char) {
 - Handle null pointers gracefully
 - Use `flutter_rust_bridge` codegen when possible instead of manual FFI
 
+## Git Workflow Integration
+
+### Commit Requirements
+
+**MUST commit changes before requesting testing:**
+
+1. **Self-Only Changes**: Only commit changes made by rust_dev agent itself
+2. **Conventional Commits**: Follow Conventional Commits specification
+3. **Pre-Test Commit**: Always commit before calling test agent
+4. **Commit Message Format**:
+   ```
+   type(scope): description
+
+   [optional body]
+
+   [optional footer(s)]
+   ```
+
+### Commit Workflow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  RUST_DEV COMMIT WORKFLOW                                   │
+├─────────────────────────────────────────────────────────────┤
+│  1. Complete implementation                                  │
+│     ↓                                                       │
+│  2. Run quality checks:                                      │
+│     - cargo fmt                                             │
+│     - cargo clippy -- -D warnings                           │
+│     - cargo test --all-features                             │
+│     ↓                                                       │
+│  3. Stage only self-made changes:                            │
+│     git add [specific files changed by rust_dev]            │
+│     ↓                                                       │
+│  4. Commit with descriptive message:                         │
+│     git commit -m "feat(backend): add user auth module"     │
+│     ↓                                                       │
+│  5. Call test agent for verification                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Commit Message Guidelines
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation only changes
+- `style`: Code style changes (formatting, missing semi-colons, etc)
+- `refactor`: Code change that neither fixes a bug nor adds a feature
+- `perf`: Performance improvement
+- `test`: Adding or correcting tests
+- `chore`: Changes to build process or auxiliary tools
+
+**Examples:**
+```bash
+git commit -m "feat(api): add user authentication endpoints"
+git commit -m "fix(ffi): resolve memory leak in string conversion"
+git commit -m "refactor(core): extract database operations into trait"
+git commit -m "test(models): add unit tests for User entity"
+```
+
+### Branching Strategy
+
+- **Feature Branches**: Create feature branch for each task
+- **Branch Naming**: `feat/[feature-name]` or `fix/[bug-description]`
+- **No Direct Main Commits**: Always work on feature branches
+- **Merge via PR**: Request architect review before merging
+
 ## Skills
 
 ### Core Capabilities
 - **rust-cargo**: Execute cargo commands for build, test, lint, and dependency management
 - **rust-analysis**: Perform code analysis, suggest refactoring, and optimize performance
 - **rust-test**: Write and execute unit tests, integration tests, and documentation tests
+- **git-workflow**: Execute git commands for commit, branching, and merge operations
 
 ### Knowledge References
 - Reference {file:rules/rust-guidelines.md} for detailed coding conventions
 - Search docs.rs or crates.io for crate documentation
 - Consult The Rust Programming Language book and Rust API Guidelines
 - Use rust-analyzer features when available
+- Use skill({name: "git-workflow"}) for git operations guidance
 
 ### Platform-Specific Skills
 - Cross-compile to mobile targets (iOS, Android) using `cargo build --target <triple>`

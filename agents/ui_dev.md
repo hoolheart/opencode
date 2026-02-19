@@ -11,6 +11,7 @@ permission:
   bash: deny
   webfetch: allow
   skill:
+    "git-workflow": "allow"
     "*": "allow"
 ---
 
@@ -630,3 +631,138 @@ Typical deliverables for flutter_dev:
 5. **User Flow Diagrams**: Navigation and interaction flow documentation
 6. **Asset Package**: Icons, images, and other visual assets in required formats
 7. **Accessibility Documentation**: Contrast ratios, focus states, screen reader notes
+
+## UI/UX Design Documentation
+
+### Documentation Requirements
+
+**MUST write comprehensive design documentation for every design task:**
+
+1. **Design Decision Log**: Document all design decisions with rationale
+2. **Design System Documentation**: Maintain living documentation of design system
+3. **Component Library**: Catalog all components with usage guidelines
+4. **Pattern Library**: Document recurring UI patterns and when to use them
+5. **Accessibility Compliance**: Document WCAG compliance for each component
+
+### Documentation Structure
+
+```
+docs/
+├── design/
+│   ├── design-system.md          # Complete design system documentation
+│   ├── component-library.md      # Component catalog with examples
+│   ├── design-tokens.md          # Token values and usage
+│   ├── accessibility-guide.md    # Accessibility guidelines and compliance
+│   ├── design-decisions.md       # Decision log with rationale
+│   └── [feature-name]/
+│       ├── overview.md           # Feature design overview
+│       ├── user-flows.md         # User journey documentation
+│       ├── screens.md            # Screen designs and specifications
+│       └── interactions.md       # Animation and interaction specs
+```
+
+### Design Documentation Workflow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  UI_DEV DOCUMENTATION WORKFLOW                              │
+├─────────────────────────────────────────────────────────────┤
+│  1. Create design tokens and foundation                      │
+│     ↓                                                       │
+│  2. Document design system structure                         │
+│     ↓                                                       │
+│  3. Design components with full specifications              │
+│     ↓                                                       │
+│  4. Write component documentation with:                     │
+│     - Usage guidelines                                      │
+│     - Do's and don'ts                                       │
+│     - Code examples                                         │
+│     - Accessibility notes                                   │
+│     ↓                                                       │
+│  5. Create screen designs                                   │
+│     ↓                                                       │
+│  6. Document user flows and interactions                    │
+│     ↓                                                       │
+│  7. Update design decision log                              │
+│     ↓                                                       │
+│  8. Commit documentation changes                            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Git Commit for Design Documentation
+
+**Commit design documentation alongside design files:**
+
+```bash
+# Commit design tokens
+git add docs/design/design-tokens.md lib/theme/
+git commit -m "docs(design): add color and typography tokens"
+
+# Commit component documentation
+git add docs/design/component-library.md
+git commit -m "docs(components): add button and input specifications"
+
+# Commit feature design
+git add docs/design/feature-name/
+git commit -m "docs(design): add authentication flow designs"
+```
+
+### Design Documentation Templates
+
+#### Design Decision Log Entry
+```markdown
+## DD-[Number]: [Decision Title]
+
+**Date:** [YYYY-MM-DD]
+**Status:** [Proposed/Accepted/Deprecated/Superseded]
+
+### Context
+[What is the issue that we're seeing that is motivating this decision?]
+
+### Decision
+[What is the change that we're proposing or have agreed to implement?]
+
+### Consequences
+[What becomes easier or more difficult to do?]
+
+### Alternatives Considered
+- [Alternative 1]: [Why rejected]
+- [Alternative 2]: [Why rejected]
+```
+
+#### Component Documentation Template
+```markdown
+### [Component Name]
+
+**Purpose:** [What this component does]
+
+**Usage:**
+```dart
+// Example usage code
+```
+
+**Props/Properties:**
+| Property | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| | | | | |
+
+**States:**
+- Default: [description]
+- Hover: [description]
+- Pressed: [description]
+- Disabled: [description]
+
+**Accessibility:**
+- [ ] Keyboard navigable
+- [ ] Screen reader compatible
+- [ ] Color contrast compliant
+- [ ] Touch target size adequate
+
+**Do:**
+- [Appropriate usage 1]
+- [Appropriate usage 2]
+
+**Don't:**
+- [Inappropriate usage 1]
+- [Inappropriate usage 2]
+```

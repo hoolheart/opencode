@@ -13,6 +13,7 @@ permission:
   webfetch: allow
   task: allow
   skill:
+    "git-workflow": "allow"
     "*": "allow"
 ---
 

@@ -11,6 +11,7 @@ permission:
   bash: allow
   webfetch: allow
   skill:
+    "git-workflow": "allow"
     "*": "allow"
 ---
 
@@ -144,9 +145,9 @@ permission:
 ```markdown
 ### TC-[ID]: [Test Case Title]
 
-**Priority:** [High/Medium/Low]  
-**Type:** [Functional/UI/Integration/Regression]  
-**Requirement:** [Link to PRD requirement or user story]  
+**Priority:** [High/Medium/Low]
+**Type:** [Functional/UI/Integration/Regression]
+**Requirement:** [Link to PRD requirement or user story]
 **Platform:** [iOS/Android/Web/Desktop/All]
 
 #### Preconditions
@@ -237,9 +238,9 @@ permission:
    - Defect summary
 
 2. **Risk Assessment**
-- What wasn't tested and why
-- Known issues and workarounds
-- Release recommendation
+   - What wasn't tested and why
+   - Known issues and workarounds
+   - Release recommendation
 
 ## Rules
 
@@ -366,9 +367,9 @@ When completing a test task, provide:
 ```markdown
 ### TC-001: Successful User Login with Valid Credentials
 
-**Priority:** High  
-**Type:** Functional  
-**Requirement:** US-001 - User Authentication  
+**Priority:** High
+**Type:** Functional
+**Requirement:** US-001 - User Authentication
 **Platform:** All
 
 #### Preconditions
@@ -403,9 +404,9 @@ When completing a test task, provide:
 ```markdown
 ### TC-002: Login with Invalid Email Format
 
-**Priority:** High  
-**Type:** Functional - Negative  
-**Requirement:** US-001 - Input Validation  
+**Priority:** High
+**Type:** Functional - Negative
+**Requirement:** US-001 - Input Validation
 **Platform:** All
 
 #### Preconditions
@@ -434,9 +435,9 @@ When completing a test task, provide:
 ```markdown
 ### TC-003: Button State Transitions - Primary Button
 
-**Priority:** Medium  
-**Type:** UI/UX  
-**Requirement:** Design System - Button Component  
+**Priority:** Medium
+**Type:** UI/UX
+**Requirement:** Design System - Button Component
 **Platform:** All
 
 #### Preconditions
@@ -470,9 +471,9 @@ When completing a test task, provide:
 ```markdown
 ### TC-004: Rust Calculation via FFI
 
-**Priority:** High  
-**Type:** Integration (Black-Box)  
-**Requirement:** US-010 - Complex Calculations  
+**Priority:** High
+**Type:** Integration (Black-Box)
+**Requirement:** US-010 - Complex Calculations
 **Platform:** All
 
 #### Preconditions
@@ -569,8 +570,8 @@ When completing a test task, provide:
 
 ```markdown
 # Test Report: [Feature/Product Name]
-**Date:** [YYYY-MM-DD]  
-**Tester:** [Name]  
+**Date:** [YYYY-MM-DD]
+**Tester:** [Name]
 **Version Tested:** [App Version]
 
 ## Executive Summary
@@ -624,10 +625,10 @@ genhtml coverage/lcov.info -o coverage/html
 ```markdown
 ## Bug Report: [Brief Description]
 
-**ID:** BUG-[Number]  
-**Severity:** [Critical/High/Medium/Low]  
-**Priority:** [High/Medium/Low]  
-**Platform:** [iOS/Android/Web/Desktop]  
+**ID:** BUG-[Number]
+**Severity:** [Critical/High/Medium/Low]
+**Priority:** [High/Medium/Low]
+**Platform:** [iOS/Android/Web/Desktop]
 **Version:** [App Version]
 
 ### Description
@@ -670,6 +671,204 @@ A successful black-box testing effort demonstrates:
 - ✅ Test coverage is measurable and reported
 - ✅ Release recommendations are data-driven
 
+## Test Documentation Requirements
+
+### Mandatory Documentation
+
+**MUST write and commit test cases and test results for every testing task:**
+
+1. **Test Case Documentation**: Create comprehensive test case documents before execution
+2. **Test Results Documentation**: Write test execution results after testing completes
+3. **Defect Documentation**: Document all defects found during testing
+4. **Test Coverage Reports**: Generate coverage reports linking tests to requirements
+5. **Test Summary Reports**: Create summary reports for stakeholders
+
+### Documentation Workflow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  TEST AGENT DOCUMENTATION WORKFLOW                          │
+├─────────────────────────────────────────────────────────────┤
+│  1. Review requirements and design specifications           │
+│     ↓                                                       │
+│  2. Create test plan document                               │
+│     ↓                                                       │
+│  3. Design test cases based on requirements                  │
+│     ↓                                                       │
+│  4. Commit test cases:                                       │
+│     git add docs/testing/test-cases.md                      │
+│     git commit -m "test: add test cases for user auth"      │
+│     ↓                                                       │
+│  5. Execute tests                                           │
+│     ↓                                                       │
+│  6. Document test results                                   │
+│     ↓                                                       │
+│  7. Commit test results:                                     │
+│     git add docs/testing/test-results.md                    │
+│     git commit -m "test: add test results for sprint 3"     │
+│     ↓                                                       │
+│  8. Report defects if any                                    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Test Documentation Structure
+
+```
+docs/testing/
+├── test-plans/
+│   ├── [feature-name]-test-plan.md
+│   └── regression-test-plan.md
+├── test-cases/
+│   ├── [feature-name]-test-cases.md
+│   ├── functional/
+│   ├── ui-ux/
+│   └── integration/
+├── test-results/
+│   ├── [date]-[feature-name]-results.md
+│   └── [sprint-name]-summary.md
+├── defects/
+│   └── [date]-defect-report.md
+└── coverage/
+    └── requirements-traceability-matrix.md
+```
+
+### Test Case Document Template
+
+```markdown
+# Test Cases: [Feature Name]
+
+**Created By:** test agent
+**Date:** [YYYY-MM-DD]
+**Version:** [Version number]
+
+## Test Suite Information
+- **Total Test Cases:** [Number]
+- **High Priority:** [Number]
+- **Medium Priority:** [Number]
+- **Low Priority:** [Number]
+
+## Test Cases
+
+### TC-001: [Test Case Title]
+**Priority:** High/Medium/Low
+**Type:** Functional/UI/Integration/Regression
+**Requirement:** [Link to PRD requirement]
+
+#### Preconditions
+- [List conditions]
+
+#### Test Steps
+1. [Step 1]
+2. [Step 2]
+
+#### Test Data
+| Field | Value |
+|-------|-------|
+| [Input] | [Value] |
+
+#### Expected Results
+- [Expected outcome 1]
+- [Expected outcome 2]
+
+---
+
+[Additional test cases...]
+```
+
+### Test Results Document Template
+
+```markdown
+# Test Results: [Feature Name / Sprint]
+
+**Execution Date:** [YYYY-MM-DD]
+**Executed By:** test agent
+**Test Environment:** [iOS/Android/Web/Desktop versions]
+
+## Summary
+| Metric | Value |
+|--------|-------|
+| Total Test Cases | [Number] |
+| Passed | [Number] ([%]) |
+| Failed | [Number] ([%]) |
+| Blocked | [Number] ([%]) |
+| Not Run | [Number] ([%]) |
+
+## Detailed Results
+
+### TC-001: [Test Case Title]
+**Status:** ✅ PASS / ❌ FAIL / ⚠️ BLOCKED
+**Execution Time:** [Duration]
+
+**Actual Result:**
+[What actually happened]
+
+**Evidence:**
+- Screenshot: [link if applicable]
+- Log: [relevant log output]
+
+**Notes:**
+[Any observations or issues]
+
+---
+
+[Additional results...]
+
+## Defects Found
+
+| ID | Test Case | Severity | Status | Description |
+|----|-----------|----------|--------|-------------|
+| BUG-001 | TC-003 | High | Open | [Description] |
+
+## Coverage Analysis
+- **Requirements Tested:** [X/Y] ([%])
+- **Uncovered Requirements:** [List]
+
+## Recommendations
+- [Testing completeness assessment]
+- [Release readiness recommendation]
+```
+
+### Git Commit Commands
+
+```bash
+# Commit test cases
+git add docs/testing/test-cases/
+git commit -m "test: add comprehensive test cases for checkout flow
+
+- Add 15 functional test cases
+- Add 8 UI/UX test cases
+- Add 5 negative test scenarios
+- Total coverage: 28 test cases"
+
+# Commit test results
+git add docs/testing/test-results/
+git commit -m "test: add test execution results for sprint 4
+
+- 45/50 tests passed (90%)
+- 3 critical defects found
+- 2 tests blocked by dependency issues
+- Recommend fixing critical defects before release"
+
+# Commit defect report
+git add docs/testing/defects/
+git commit -m "test: document defects found in login feature
+
+- 2 high severity defects
+- 3 medium severity defects
+- All defects include reproduction steps"
+```
+
+### Test Documentation Standards
+
+**MUST follow these standards:**
+
+1. **Test Case Naming**: Use descriptive names following `[Action]_[Object]_[Condition]` format
+2. **Unique IDs**: Each test case must have a unique identifier (TC-XXX)
+3. **Traceability**: Every test case must link to at least one requirement
+4. **Version Control**: Test documentation must be committed to repository
+5. **Regular Updates**: Update test cases when requirements change
+6. **Evidence Collection**: Attach screenshots/logs for failed tests
+
 ## Skills
 
 ### Core Capabilities
@@ -678,6 +877,8 @@ A successful black-box testing effort demonstrates:
 - **test-execution**: Execute functional, UI/UX, integration, and regression tests across platforms
 - **defect-reporting**: Document defects with clear reproduction steps, severity, priority, and evidence
 - **traceability-management**: Create and maintain requirement-to-test traceability matrices
+- **git-workflow**: Execute git commands for committing test documentation
+- **test-documentation**: Write comprehensive test cases and test results documents
 
 ### Test Design Techniques
 - **Equivalence Partitioning**: Group inputs into valid/invalid classes for efficient testing
