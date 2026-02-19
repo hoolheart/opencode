@@ -248,3 +248,167 @@ To start a software project:
 - Each agent references relevant guidelines files
 - Complete integration workflows documented
 - Review-driven development process applied
+
+
+2026-02-19
+----------
+
+## Overview
+Enhanced the agent ecosystem with git workflow integration, comprehensive documentation, and improved collaboration workflows. Added ops agent for DevOps responsibilities and established Mermaid as the standard for architecture diagrams.
+
+## Changes Summary
+
+### 🔄 Git Workflow Integration
+**Applied to all 8 agents:**
+- Added `git-workflow` skill to all agent configurations
+- Enabled conventional commits and proper version control workflows
+- Standardized commit message formats across the team
+
+### 🆕 New Agent: ops (Subagent)
+**File**: `agents/ops.md` (~420 lines)
+**Mode**: subagent | **Temperature**: 0.3
+
+**Responsibilities**:
+- Build script creation for Rust and Flutter
+- Package creation (iOS, Android, Web, Desktop)
+- CI/CD pipeline setup (GitHub Actions)
+- Deployment scripts and automation
+- Infrastructure as Code (Docker, Kubernetes)
+- Release management with semantic versioning
+
+**Key Features**:
+- Cross-platform build configurations
+- Environment-specific deployments (dev/staging/prod)
+- Containerized build environments
+- Security best practices for CI/CD
+
+### 📝 Agent-Specific Updates
+
+#### 1. product (PRIMARY)
+- Added git-workflow skill integration
+
+#### 2. architect (Subagent)
+- **Added Merge Review Process**: First reviewer during merge with design/code arbitration
+- **Design/Code Arbitration Rules**: Clear criteria for when to change code vs. change design
+- **Mermaid Diagram Standard**: MUST use Mermaid syntax for all architecture diagrams
+- Examples provided for flowcharts, sequence diagrams, class diagrams, and state diagrams
+
+#### 3. rust_dev (Subagent)
+- **Pre-test Commit Requirement**: MUST commit changes before requesting testing
+- Conventional commits workflow with specific git commands
+- Self-only changes policy
+- Quality gates: cargo fmt, clippy, test before commit
+
+#### 4. flutter_dev (Subagent)
+- **Pre-test Commit Requirement**: MUST commit changes before requesting testing
+- Dart/Flutter quality checks before commits
+- Collaboration guidelines with ui_dev agent
+
+#### 5. ui_dev (Subagent)
+- **Design Documentation Requirement**: MUST write comprehensive design docs for every task
+- Documentation structure defined:
+  ```
+  docs/design/
+  ├── design-system.md
+  ├── component-library.md
+  ├── design-tokens.md
+  ├── accessibility-guide.md
+  └── [feature-name]/
+  ```
+- Git commit workflow for design documentation
+
+#### 6. test (Subagent)
+- **Test Documentation Requirements**: MUST write test cases and test results
+- Documentation structure:
+  ```
+  docs/testing/
+  ├── test-plans/
+  ├── test-cases/
+  ├── test-results/
+  ├── defects/
+  └── coverage/
+  ```
+- Git workflow for committing test documentation
+
+#### 7. office (Subagent)
+- Enhanced collaboration requirements with review agent
+- Added auto-continue note for handling reasoning content issues
+
+### 📚 Documentation Created
+
+#### 1. dev_team_en.md (English)
+**File**: `docs/dev_team_en.md` (~400 lines)
+
+**Contents**:
+- Agent hierarchy with Mermaid flowchart
+- Complete roles and responsibilities for all 7 agents
+- Collaboration workflows with visual diagrams
+- Git workflow integration guidelines
+- Quality gates documentation
+- Getting started guide
+
+**Visual Diagrams**:
+- Agent hierarchy flowchart
+- Task lifecycle flowchart
+- Merge review process flowchart
+- UI/Flutter collaboration sequence diagram
+
+#### 2. dev_team_zh.md (Chinese)
+**File**: `docs/dev_team_zh.md` (~400 lines)
+
+**Contents**:
+- Complete Chinese translation of team documentation
+- Same structure and diagrams as English version
+- Localized terminology and examples
+- Emoji-enhanced section headers for better readability
+
+### 📊 Workflow Diagrams (Mermaid)
+
+All workflows now use Mermaid syntax for better visualization:
+
+1. **Agent Hierarchy**: Flowchart showing relationships between 7 agents
+2. **Task Lifecycle**: Decision flow with loops for testing and review
+3. **Merge Review Process**: Arbitration workflow for design/code conflicts
+4. **UI/Flutter Collaboration**: Sequence diagram for design handoff
+
+### 🎨 Quality Improvements
+
+#### Based on Review Feedback:
+- Fixed agent name references (backticks for code formatting)
+- Standardized terminology across documents
+- Added emojis to Chinese documentation headers
+- Improved translation consistency
+- Clarified workflow diagrams with better labels
+- Enhanced related documents section with context
+
+### 📈 Statistics
+
+| Metric | Count |
+|--------|-------|
+| **Total Agents** | 8 (1 primary + 7 subagents) |
+| **New Agents** | 1 (ops) |
+| **Updated Agents** | 7 (product, architect, rust_dev, flutter_dev, ui_dev, test, office) |
+| **New Documentation** | 2 (dev_team_en.md, dev_team_zh.md) |
+| **Total Lines Added** | ~1,500+ lines |
+
+### 🔧 Technical Stack Updates
+
+- **Diagramming**: Mermaid (standardized for all architecture diagrams)
+- **Version Control**: Git with Conventional Commits
+- **CI/CD**: GitHub Actions (via ops agent)
+- **Documentation**: Bilingual (English/Chinese) with emoji support
+
+### 📝 Commit Message
+```
+feat(agents): enhance agent ecosystem with git workflow and documentation
+
+- Add git-workflow skill to all agents
+- Create ops agent for CI/CD and deployment
+- Add pre-test commit requirements for dev agents
+- Add design/test documentation requirements
+- Implement merge review and arbitration workflows
+- Create comprehensive bilingual team documentation
+- Standardize Mermaid for all diagrams
+- Apply review feedback and quality improvements
+```
+
