@@ -250,6 +250,321 @@ To start a software project:
 - Review-driven development process applied
 
 
+2026-02-20
+----------
+
+## Overview
+Expanded the agent ecosystem to support multiple technology stacks beyond the default Rust + Flutter. Added three new development agents (C/C++, Python, TypeScript/Vue.js) and enhanced the architect agent to intelligently select appropriate tech stacks based on user requirements.
+
+## Changes Summary
+
+### 🆕 New Agents: Multi-Stack Development Support
+
+#### 1. c_cpp_dev (Subagent)
+**File**: `agents/c_cpp_dev.md` (~375 lines)
+**Mode**: subagent | **Temperature**: 0.2
+
+**Responsibilities**:
+- Write modern C++ (C++17/C++20) code with C compatibility
+- Memory management with RAII and smart pointers (unique_ptr, shared_ptr)
+- System programming and embedded development
+- Cross-platform development (Linux, Windows, macOS, embedded)
+- Static analysis (clang-tidy, cppcheck) and sanitizers (ASan, TSan, UBSan)
+- Performance optimization with SIMD and profiling
+
+**Key Features**:
+- Modern C++ best practices following C++ Core Guidelines
+- Google Test for comprehensive testing
+- CMake build system with cross-compilation support
+- Thread-safe code with std::mutex, std::atomic
+- FFI integration with Rust and Python
+- Memory safety without garbage collection
+
+**Use When**: System programming, embedded development, performance-critical applications, native libraries
+
+---
+
+#### 2. python_dev (Subagent)
+**File**: `agents/python_dev.md` (~920 lines)
+**Mode**: subagent | **Temperature**: 0.2
+
+**Responsibilities**:
+- Write type-safe Python code (3.10+) with comprehensive type hints
+- Web backend development with FastAPI
+- Data processing with Pandas and NumPy
+- Machine learning pipeline development
+- Async/await programming with asyncio
+- CLI tool development with Click/Typer
+
+**Key Features**:
+- Strict type checking with mypy
+- FastAPI for high-performance APIs
+- pytest for comprehensive testing
+- Poetry/pip for package management
+- Async patterns for I/O-bound operations
+- Pydantic for data validation
+
+**Use When**: Web backends, data processing, ML/AI, automation scripts, rapid prototyping
+
+---
+
+#### 3. ts_dev (Subagent)
+**File**: `agents/ts_dev.md` (~900 lines)
+**Mode**: subagent | **Temperature**: 0.2
+
+**Responsibilities**:
+- Write type-safe TypeScript code with strict mode
+- Vue 3 SPA development with Composition API
+- State management with Pinia
+- Component library development
+- API integration with type-safe clients
+- Frontend testing with Vitest
+
+**Key Features**:
+- Vue 3 `<script setup>` syntax
+- TypeScript strict mode enforcement
+- Pinia stores with full type safety
+- Vite build tool for fast development
+- Vitest and Vue Test Utils for testing
+- Accessibility (a11y) implementation
+
+**Use When**: Web frontend applications, Vue.js projects, browser-based UIs
+
+---
+
+### 🔄 Enhanced Agent: architect (Multi-Stack Support)
+
+**File**: `agents/architect.md` (Updated)
+
+**Major Changes**:
+- **Multi-Stack Architecture Design**: Now supports 5 technology stacks
+  - **Default**: Rust + Flutter (cross-platform native apps)
+  - **C/C++**: System programming, embedded, performance-critical
+  - **Python**: Web backends, data processing, ML, automation
+  - **TypeScript/Vue.js**: Web frontend development
+  - **Mixed Stacks**: Can combine technologies (e.g., Python backend + Vue.js frontend)
+
+- **Tech Stack Selection Guidelines**:
+  - DEFAULT to Rust + Flutter unless user specifies otherwise
+  - Use alternative stacks ONLY when user explicitly requires them
+  - Architect evaluates requirements and recommends appropriate stack
+
+- **Enhanced Skills Section**:
+  - Added `tech-stack-selection` capability
+  - Platform-specific skills for all supported stacks
+  - Cross-stack integration guidance
+
+- **Git Workflow Integration**:
+  - Added commit workflow for architecture documentation
+  - Conventional commits for design changes
+  - Branching strategy for design iterations
+
+- **Integration with Other Agents**:
+  - Collaboration guidelines with all development agents
+  - Review procedures for each tech stack
+  - Clear escalation paths
+
+---
+
+## Tech Stack Selection Guide
+
+### Decision Matrix
+
+| Requirement | Recommended Stack | Alternative |
+|------------|------------------|-------------|
+| Cross-platform mobile/desktop | **Rust + Flutter** | - |
+| System/embedded programming | **C/C++** | Rust |
+| Web backend/API | **Python** (FastAPI) | Rust (Actix/Rocket) |
+| Data processing/ML | **Python** | - |
+| Web frontend | **TypeScript + Vue.js** | Flutter Web |
+| High-performance native | **C/C++** or **Rust** | - |
+| Rapid prototyping | **Python** | - |
+
+### Stack Combinations
+
+**Full-Stack Web**:
+- Backend: Python (FastAPI) or Rust
+- Frontend: TypeScript + Vue.js
+
+**Cross-Platform Native**:
+- Backend: Rust
+- Frontend: Flutter
+
+**Performance-Critical System**:
+- Core: C/C++
+- API Layer: Rust or Python
+
+**ML/Data Pipeline**:
+- Processing: Python
+- Visualization: TypeScript + Vue.js
+
+---
+
+## Updated Agent Hierarchy
+
+```
+                    ┌─────────────────┐
+                    │  product agent  │
+                    │   (PRIMARY)     │
+                    └────────┬────────┘
+                             │
+           ┌─────────────────┼─────────────────┐
+           │                 │                 │
+     ┌─────▼─────┐    ┌─────▼─────┐    ┌─────▼─────┐
+     │ architect │    │ rust_dev  │    │flutter_dev│
+     │ (SUB)     │    │ (SUB)     │    │ (SUB)     │
+     └─────┬─────┘    └─────┬─────┘    └─────┬─────┘
+           │                │                │
+     ┌─────▼─────┐         │           ┌─────▼─────┐
+     │   test    │◄────────┴──────────►│  ui_dev   │
+     │  (SUB)    │                     │  (SUB)    │
+     └───────────┘                     └───────────┘
+                             │
+           ┌─────────────────┼─────────────────┐
+           │                 │                 │
+     ┌─────▼─────┐    ┌─────▼─────┐    ┌─────▼─────┐
+     │  c_cpp_dev│    │python_dev │    │  ts_dev   │
+     │  (SUB)    │    │ (SUB)     │    │  (SUB)    │
+     └───────────┘    └───────────┘    └───────────┘
+```
+
+**Total Agents**: 11 (1 primary + 10 subagents)
+
+---
+
+## Workflow Integration
+
+### Development Workflow by Stack
+
+**Rust + Flutter** (Default):
+```
+product → architect → rust_dev/flutter_dev → test → architect (review)
+```
+
+**Python Backend**:
+```
+product → architect → python_dev → test → architect (review)
+```
+
+**TypeScript/Vue.js Frontend**:
+```
+product → architect → ts_dev → test → architect (review)
+```
+
+**Mixed Stack** (e.g., Python + Vue.js):
+```
+product → architect → python_dev + ts_dev → test → architect (review)
+```
+
+---
+
+## Documentation Updates
+
+### Reference Guidelines
+- **C/C++**: C++ Core Guidelines, Google C++ Style Guide, MISRA C/C++
+- **Python**: PEP 8, Google Python Style Guide
+- **TypeScript**: TypeScript Guidelines (existing file)
+- **Vue.js**: Vue Style Guide, Vue 3 Composition API docs
+
+### Code Examples
+Each new agent includes:
+- Comprehensive code examples (50+ examples total)
+- Build system configurations (CMake, pyproject.toml, Vite)
+- Testing patterns for each stack
+- Git workflow integration
+- Common commands reference
+
+---
+
+## Quality Assurance
+
+### Review Process
+All new agents were reviewed by `@review` subagent:
+- **Overall Grade**: A to B+ (Excellent to Very Good)
+- **Structure**: Consistent with existing agents
+- **Completeness**: All sections present
+- **Technical Accuracy**: Guidelines verified
+
+### Minor Improvements Applied
+- Standardized frontmatter formatting across all agents
+- Added Git Workflow Integration sections
+- Added Integration with Other Agents sections
+- Fixed permission block consistency
+
+---
+
+## Statistics
+
+| Metric | Count |
+|--------|-------|
+| **Total Agents** | 11 (1 primary + 10 subagents) |
+| **New Agents** | 3 (c_cpp_dev, python_dev, ts_dev) |
+| **Updated Agents** | 1 (architect) |
+| **Total Lines Added** | ~2,200+ lines |
+| **Supported Tech Stacks** | 5 |
+
+---
+
+## Usage Examples
+
+### Start Python Web Project
+```
+User: "Build a Python REST API for user management"
+product → architect (selects Python) → python_dev → test → delivery
+```
+
+### Start Vue.js Frontend
+```
+User: "Create a Vue.js dashboard for data visualization"
+product → architect (selects TypeScript/Vue.js) → ts_dev → test → delivery
+```
+
+### Start C++ System Project
+```
+User: "Develop a high-performance C++ library for image processing"
+product → architect (selects C/C++) → c_cpp_dev → test → delivery
+```
+
+### Mixed Stack (Full-Stack Web)
+```
+User: "Build a web app with Python backend and Vue.js frontend"
+product → architect (selects Python + Vue.js) → python_dev + ts_dev → test → delivery
+```
+
+---
+
+## Notes
+
+- **Default Stack Maintained**: Rust + Flutter remains the default for cross-platform native apps
+- **Explicit Selection Required**: Alternative stacks only used when user specifically requests
+- **Consistent Patterns**: All agents follow same structure, workflows, and quality gates
+- **Cross-Stack Collaboration**: Agents can work together on mixed-technology projects
+- **Future-Ready**: Architecture supports adding more technology stacks as needed
+
+---
+
+## Commit Message
+```
+feat(agents): add multi-stack development support
+
+- Create c_cpp_dev agent for C/C++ development (375 lines)
+- Create python_dev agent for Python development (920 lines)
+- Create ts_dev agent for TypeScript/Vue.js development (900 lines)
+- Update architect agent to support 5 tech stacks
+- Add tech stack selection guidelines (Rust+Flutter default)
+- Maintain consistent structure with existing agents
+- Add comprehensive code examples and build configurations
+- All agents reviewed and approved
+
+Supported stacks:
+- Rust + Flutter (default)
+- C/C++
+- Python
+- TypeScript + Vue.js
+- Mixed combinations
+```
+
+
 2026-02-19
 ----------
 
