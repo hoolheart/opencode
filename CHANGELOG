@@ -250,6 +250,349 @@ To start a software project:
 - Review-driven development process applied
 
 
+2026-02-21
+----------
+
+## Overview
+Created a comprehensive deep research agent group consisting of 6 specialized agents (1 primary + 5 subagents) for conducting systematic, high-quality research tasks. The system features strict quality control with citation verification, creative expansion capabilities, and an 8-phase standardized workflow.
+
+## Deep Research Agent Group
+
+### 1. research (PRIMARY AGENT)
+**File**: `agents/research.md` (~350 lines)
+**Mode**: primary | **Temperature**: 0.5 | **Steps**: 100
+
+**Responsibilities**:
+- Receive and clarify user research requirements
+- Determine if requirements are specific enough
+- Design questionnaires to help users specify details
+- Coordinate subagents (inspect, search, insight, creative, examine)
+- Manage the 8-phase research workflow
+- Output final research report with metadata
+
+**8-Phase Workflow**:
+1. **Requirement Clarification**: Evaluate and confirm research needs
+2. **Planning**: Create request.md and standard.md
+3. **Information Gathering**: Call inspect → search for data collection
+4. **Analysis**: Call insight to write result.md
+5. **Quality Assurance**: Call examine to review against standards
+6. **Creative Expansion** (if Major Revision): Call creative for new directions
+7. **Refinement** (if Minor Revision): Revise and re-review
+8. **Finalization**: Add metadata and deliver final report
+
+**Key Features**:
+- Manages iterative research cycles until quality standards met
+- Tracks research cycles and total time spent
+- Produces structured research documentation
+
+---
+
+### 2. inspect (Subagent)
+**File**: `agents/inspect.md` (~180 lines)
+**Mode**: subagent | **Temperature**: 0.3 | **Steps**: 15
+
+**Responsibilities**:
+- Design comprehensive search keywords based on research requirements
+- Identify priority websites and authoritative sources
+- Create structured search_plan.md with:
+  - Primary and secondary keywords
+  - Advanced search queries
+  - Priority sources (academic, industry, news, government)
+  - Search strategy notes
+
+**Input**: request.md, revise.md (if applicable)  
+**Output**: search_plan.md
+
+---
+
+### 3. search (Subagent)
+**File**: `agents/search.md` (~260 lines)
+**Mode**: subagent | **Temperature**: 0.3 | **Steps**: 30
+
+**Responsibilities**:
+- Execute search plans using provided keywords and sources
+- Collect and extract relevant web information
+- Transcribe findings into structured Markdown files in raw/ folder
+- **Save original PDF files** to raw/pdfs/ directory
+- Maintain complete source attribution (URL, author, date, reliability score)
+
+**Output Structure**:
+```
+raw/
+├── YYYYMMDD_001_topic.md
+├── YYYYMMDD_002_topic.md
+└── pdfs/
+    ├── YYYYMMDD_001_paper.pdf
+    └── YYYYMMDD_002_paper.pdf
+```
+
+**Key Features**:
+- Information quality assessment (authority, accuracy, objectivity, currency, coverage)
+- Proper citation with page numbers for academic sources
+- Cross-reference tracking
+
+---
+
+### 4. insight (Subagent)
+**File**: `agents/insight.md` (~300 lines)
+**Mode**: subagent | **Temperature**: 0.4 | **Steps**: 25
+
+**Responsibilities**:
+- Analyze raw research materials from raw/ folder
+- Synthesize key insights and identify patterns
+- Write comprehensive research reports in structured format
+- **Ensure accurate citations** to all source materials
+- Address all research questions from request.md
+
+**Report Structure**:
+- Executive Summary
+- Research Objectives
+- Methodology
+- Key Findings (with citations)
+- Detailed Analysis
+- Contradictions and Uncertainties
+- Conclusions and Recommendations
+- References and Source Inventory
+
+**Citation Standards**:
+- Every factual claim must have citation
+- Direct quotes include page/paragraph references
+- Format: [raw/YYYYMMDD_file.md] or [Author, Year via raw/file.md]
+
+---
+
+### 5. creative (Subagent)
+**File**: `agents/creative.md` (~290 lines)
+**Mode**: subagent | **Temperature**: **0.7** | **Steps**: 25
+
+**Responsibilities**:
+- Analyze revision requirements from examine subagent
+- **Identify blind spots** and information gaps in current research
+- **Propose alternative perspectives** and angles
+- Suggest new research directions for deeper investigation
+- Think creatively about unconventional sources and approaches
+- **Cross-disciplinary connections** and innovative thinking
+
+**Creative Thinking Guidelines**:
+- Challenge assumptions
+- Lateral thinking (draw connections to unrelated fields)
+- Devil's advocate (consider opposing viewpoints)
+- Future-oriented (emerging trends)
+- System thinking (broader interconnections)
+
+**Input**: revise.md, result.md, request.md  
+**Output**: creative_directions.md
+
+---
+
+### 6. examine (Subagent)
+**File**: `agents/examine.md` (~340 lines)
+**Mode**: subagent | **Temperature**: **0.0** | **Steps**: 20
+
+**Responsibilities**:
+- **Rigorously review** research reports against review criteria
+- **Verify EVERY citation** by cross-referencing with raw sources
+- Check logical consistency and argument validity
+- **Determine revision level**: "Major Revision", "Minor Revision", or "Pass"
+- Provide specific, actionable feedback for improvements
+
+**Three-Level Revision System**:
+
+**Major Revision (大修)** - Required when ANY apply:
+- **Citation mismatch** - Any claim does not match cited source
+- Factual error
+- Missing core content
+- Logical fallacy
+- Insufficient evidence
+
+**Minor Revision (小修)** - Appropriate when:
+- Citations accurate but formatting could improve
+- Content factually correct but lacks detail
+- Minor clarifications needed
+
+**Pass (通过)** - Granted when ALL criteria met:
+- All citations verified and accurate
+- No factual errors
+- Logic sound and consistent
+- All requirements addressed
+
+**Review Rules**:
+1. **Verify EVERY citation** - No exceptions
+2. **Trust only math and logic** - Do not accept claims at face value
+3. **Citation mismatch → MUST require Major Revision**
+4. Temperature 0.0 ensures complete objectivity
+
+**Output Files**:
+- examine_report.md (complete audit trail)
+- revise.md (actionable improvement requirements, if revision needed)
+
+---
+
+## Research Workflow Visualization
+
+```
+User → research
+  ├─> Creates: request.md, standard.md
+  │
+  ├─> Calls: inspect
+  │   └─> Output: search_plan.md
+  │
+  ├─> Calls: search
+  │   └─> Output: raw/*.md, raw/pdfs/*.pdf
+  │
+  ├─> Calls: insight
+  │   └─> Output: result.md
+  │
+  └─> Calls: examine
+      ├─> Output: examine_report.md
+      ├─> Major Revision → creative → New research cycle
+      ├─> Minor Revision → insight → Revise → Re-examine
+      └─> Pass → Add metadata → final_report.md → User
+```
+
+## Quality Control Mechanisms
+
+### 1. Strict Citation Verification
+- **Critical requirement**: Every factual claim must have citation
+- Examine agent verifies every citation against raw sources
+- **Citation mismatch = Automatic Major Revision**
+
+### 2. Multi-Round Review Process
+- Report undergoes rigorous review by examine agent
+- Major issues trigger creative expansion for new research directions
+- Minor issues trigger refinement cycles until quality standards met
+
+### 3. Source Preservation
+- All raw web sources saved as Markdown with metadata
+- PDF files preserved in original format
+- Complete audit trail for fact-checking
+
+### 4. Iterative Improvement
+- Research agent tracks number of cycles and total time
+- Each iteration improves report quality
+- Process continues until examine agent approves
+
+## Documentation Created
+
+### 1. research_zh.md (Chinese)
+**File**: `docs/research_zh.md` (~305 lines)
+
+**Contents**:
+- Complete guide in Chinese
+- Agent introductions with responsibilities
+- 8-phase workflow explanation
+- Usage instructions with examples
+- Review criteria and revision system
+- Troubleshooting guide
+
+### 2. research_en.md (English)
+**File**: `docs/research_en.md` (~305 lines)
+
+**Contents**:
+- Complete guide in English
+- Same structure as Chinese version
+- Professional terminology and examples
+- Bilingual consistency maintained
+
+## Key Features
+
+### 1. Temperature Configuration
+| Agent | Temperature | Purpose |
+|-------|-------------|---------|
+| research | 0.5 | Balanced coordination |
+| inspect | 0.3 | Precise query design |
+| search | 0.3 | Accurate information collection |
+| insight | 0.4 | Analytical synthesis |
+| **creative** | **0.7** | **Innovative thinking** |
+| **examine** | **0.0** | **Complete objectivity** |
+
+### 2. File Structure
+```
+workspace/
+├── request.md              # Research requirements
+├── standard.md             # Review criteria
+├── search_plan.md          # Search strategy
+├── raw/                    # Original materials
+│   ├── *.md               # Web sources
+│   └── pdfs/              # Original PDFs
+├── result.md              # Research report (iterative)
+├── examine_report.md      # Quality audit
+├── revise.md              # Improvement requirements
+├── creative_directions.md # New research directions
+└── final_report.md        # Final deliverable
+```
+
+### 3. Metadata Tracking
+Final report includes:
+- Current date
+- Number of research cycles completed
+- Total time spent
+- Complete source inventory
+
+## Statistics
+
+| Metric | Count |
+|--------|-------|
+| **Total Agents** | 6 (1 primary + 5 subagents) |
+| **New Agents** | 6 (research, inspect, search, insight, creative, examine) |
+| **New Documentation** | 2 (research_zh.md, research_en.md) |
+| **Total Lines Added** | ~2,050+ lines |
+| **Workflow Phases** | 8 |
+| **Supported Formats** | Markdown, PDF |
+
+## Usage Example
+
+```
+User: "Research China's new energy vehicle market"
+
+research:
+  1. Creates request.md with research objectives
+  2. Calls inspect → search_plan.md
+  3. Calls search → raw/*.md, raw/pdfs/*.pdf
+  4. Calls insight → result.md
+  5. Calls examine → examine_report.md
+     (Assumes "Minor Revision" required)
+  6. insight revises result.md
+  7. examine reviews → "Pass"
+  8. Adds metadata → final_report.md
+
+User receives: Comprehensive report with all citations,
+               source inventory, and research metadata
+```
+
+## Review and Approval
+
+All agents and documentation reviewed by @review subagent:
+- **Overall Grade**: A (Excellent)
+- **Structure**: Consistent and complete
+- **Technical Accuracy**: All configurations verified
+- **Documentation Quality**: Bilingual guides approved
+
+## Commit Message
+```
+feat(agents): create deep research agent group for comprehensive research tasks
+
+- Create research agent (primary) to coordinate research workflow
+- Create inspect agent for search query design
+- Create search agent for information collection with PDF support
+- Create insight agent for report writing with citation standards
+- Create creative agent (temp 0.7) for innovative research directions
+- Create examine agent (temp 0.0) for rigorous quality review
+- Implement 8-phase research workflow with iterative improvement
+- Add strict citation verification (mismatch = Major Revision)
+- Support PDF preservation and Markdown transcription
+- Create comprehensive bilingual documentation (zh/en)
+- All agents reviewed and approved
+
+Features:
+- Multi-cycle research with quality gates
+- Complete source traceability
+- Three-level revision system (Major/Minor/Pass)
+- Creative expansion for research gaps
+- Professional report generation
+```
+
+
 2026-02-20
 ----------
 
