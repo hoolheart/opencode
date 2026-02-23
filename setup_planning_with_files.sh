@@ -13,6 +13,6 @@ mkdir -p ./skills
 rm -rf ./skills/planning-with-files
 
 # 4. Create symlinks
-ln -s ./planning-with-files/.opencode/skills/planning-with-files ./skills/planning-with-files
+cp -r ./planning-with-files/.opencode/skills/planning-with-files ./skills/planning-with-files
 
 # 5. Restart OpenCode

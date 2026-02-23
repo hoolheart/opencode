@@ -15,7 +15,7 @@ rm -f ./plugins/superpowers.js
 rm -rf ./skills/superpowers
 
 # 4. Create symlinks
-ln -s ./superpowers/.opencode/plugins/superpowers.js ./plugins/superpowers.js
-ln -s ./superpowers/skills ./skills/superpowers
+cp ./superpowers/.opencode/plugins/superpowers.js ./plugins/superpowers.js
+cp -r ./superpowers/skills ./skills/superpowers
 
 # 5. Restart OpenCode
