@@ -1,6 +1,7 @@
 # 1. Install Superpowers (or update existing)
 if [ -d ./superpowers ]; then
   cd ./superpowers && git pull
+  cd ..
 else
   git submodule add ../superpowers.git superpowers
 fi

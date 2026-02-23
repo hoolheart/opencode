@@ -1,6 +1,7 @@
 # 1. Install planning-with-files (or update existing)
 if [ -d ./planning-with-files ]; then
   cd ./planning-with-files && git pull
+  cd ..
 else
   git submodule add ../planning-with-files.git planning-with-files
 fi
