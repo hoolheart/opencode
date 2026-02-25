@@ -18,8 +18,6 @@ description: %{description of agent}
 mode: primary/subagent
 temperature: 0.3	# (0~1)
 steps: 10         # interger, remove this option if agent should work without step limit
-tools:
-  skill: true     # enable skill
 permission:       # allow/deny/ask
   read: allow
   write: allow
@@ -36,10 +34,6 @@ permission:       # allow/deny/ask
 - Job 1
 - ...
 
-## Rules
-
-- When doing xxx, follow the rule from {file:rules/XXX-guidelines.md}
-
 ## Skills
 
 - When doing xxx, use skill({name: "skill name"})
@@ -47,11 +41,11 @@ permission:       # allow/deny/ask
 ```
 
 - Query user to collect necessary information of agent
-- Search relevant rules and skills in local config, confirm with user and then specify them in agent file
-- If user requires web search, then search relevant rules and skills in internet, select best practice, confirm with user and then add them into local config (rule put in `rules` folder, skill put in `skills` folder), specify them in agent file
+- Search relevant skills in local config, confirm with user and then specify them in agent file
+- Add any section in agent file as required by user
 
 ## When to use me
 
 Use this when user are creating agent.
 
-**Note**: If user speaks language other than English, use such language to communicate with user but always create agent file in English.
+**Note**: No matter which language user uses, write agent file in English only.
