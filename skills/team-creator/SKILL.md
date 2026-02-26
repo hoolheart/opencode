@@ -1,15 +1,15 @@
 ---
-name: create-agent-group
-description: create or optimize agent group due to given workflow
+name: team-creator
+description: create or optimize team of multiple agents due to given workflow
 license: MIT
 compatibility: opencode
 ---
 
 ## What I do
 
-Create or optimize a group of multiple agents.
+Create or optimize a team of multiple agents.
 
-Such agent group includes only one primary agent and multiple subagents. Create or optimize agent files in global config (e.g. OpenCode `~/.config/opencode/agents`), or project config (e.g. OpenCode `{PROJECT_PATH}/.opencode/agents`) if required explicitly by user.
+Such agent team includes only one primary agent and multiple subagents. Create or optimize agent files in global config (e.g. OpenCode `~/.config/opencode/agents`), or project config (e.g. OpenCode `{PROJECT_PATH}/.opencode/agents`) if required explicitly by user.
 
 The general principle is to seperate plan, work and review into different agents for each task.
 
@@ -31,7 +31,7 @@ All agents' files are written in English.
 
 ## When to use me
 
-Use this when user wants to create a group of agents to fulfill a given workflow.
+Use this when user wants to create a team of agents to fulfill a given workflow.
 
 ## Templates
 
@@ -54,11 +54,11 @@ permission:       # allow/deny/ask
 
 ## Team
 
-Introduce all agents in this group, including their brief description
+Introduce all agents in this team, including their brief description
 
 ## Workflow
 
-describe overall workflow of agent group
+describe overall workflow of agent team
 
 ## Resposibilities
 

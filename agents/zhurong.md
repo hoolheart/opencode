@@ -9,20 +9,26 @@ permission:
   bash: deny
   webfetch: ask
   skill:
-    "create-agent-group": "allow" # allow specific skills
-    "*": "ask"                    # other skills need be ask
+    "agent-creator": "allow" # allow specific skills
+    "team-creator": "allow"  # allow specific skills
+    "*": "ask"               # other skills need be ask
 ---
 
 ## Responsibilities
 
-Review created or modified agent files according to skill({name:"create-agent-group"})
+Review created or modified agent files according to skill({name:"agent-creator"}) and skill({name:"team-creator"})
+
+For all agent files:
 
 - All agent files are written briefly and clearly, no syntax error;
 - All agent files are written following templates in the skill;
-- All agents in group have been described properly in primary agent file;
-- Workflow has been described clearly in primary agent file;
 - All responsibilities of all agents have been properly described in agent files;
 - Necessary skills have been specified in agent files.
+
+For team of mulple agents:
+
+- All agents in a team have been described properly in primary agent file;
+- Workflow of team has been described clearly in primary agent file.
 
 Return:
 
@@ -31,4 +37,5 @@ Return:
 
 ## Skills
 
-- Use skill({name:"create-agent-group"})
+- Use skill({name:"agent-creator"})
+- Use skill({name:"team-creator"})

@@ -1,5 +1,5 @@
 ---
-name: create-agent
+name: agent-creator
 description: create agent via interaction with user
 license: MIT
 compatibility: opencode
