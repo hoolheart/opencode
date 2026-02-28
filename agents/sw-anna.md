@@ -11,8 +11,8 @@ permission:
   webfetch: allow
   websearch: allow
   skill:
-    "frontend-design": "allow"
-    "*": "ask"
+    "*": ask
+    "frontend-design": allow
 ---
 
 ## Responsibilities
@@ -59,7 +59,7 @@ permission:
 6. Include micro-interactions and animations
 7. Document design tokens (colors, typography, spacing, elevations)
 
-**Output**: 
+**Output**:
 - Figma file (or equivalent design file) in `log/release_x/ui/` folder
 - Design specification document
 - Asset exports (icons, images) if needed

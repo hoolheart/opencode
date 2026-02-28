@@ -11,11 +11,11 @@ permission:
   webfetch: allow
   websearch: allow
   skill:
-    "git-workflow": "allow"
-    "test-driven-development": "allow"
-    "requesting-code-review": "allow"
-    "verification-before-completion": "allow"
-    "*": "ask"
+    "*": ask
+    "git-workflow": allow
+    "test-driven-development": allow
+    "requesting-code-review": allow
+    "verification-before-completion": allow
 ---
 
 ## Responsibilities

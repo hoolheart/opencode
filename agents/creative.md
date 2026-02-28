@@ -10,7 +10,7 @@ permission:
   bash: deny
   webfetch: allow
   skill:
-    "*": "ask"
+    "*": ask
 ---
 
 ## Responsibilities

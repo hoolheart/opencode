@@ -103,8 +103,8 @@ permission:       # allow/deny/ask
   webfetch: ask
   websearch: allow
   skill:
-    "xxx": "allow" # allow specific skills
-    "*": "ask"     # other skills need be ask
+    "*": ask     # other skills need be ask
+    "xxx": allow # allow specific skills
 ---
 
 ## Resposibilities

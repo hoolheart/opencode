@@ -11,12 +11,12 @@ permission:
   webfetch: allow
   websearch: allow
   skill:
-    "git-workflow": "allow"
-    "planning-with-files": "allow"
-    "writing-plans": "allow"
-    "test-driven-development": "allow"
-    "requesting-code-review": "allow"
-    "*": "ask"
+    "*": ask
+    "git-workflow": allow
+    "planning-with-files": allow
+    "writing-plans": allow
+    "test-driven-development": allow
+    "requesting-code-review": allow
 ---
 
 ## Responsibilities

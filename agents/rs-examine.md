@@ -10,11 +10,11 @@ permission:
   bash: allow
   webfetch: allow
   skill:
-    "pdf": "allow"
-    "docx": "allow"
-    "xlsx": "allow"
-    "pptx": "allow"
-    "*": "ask"
+    "*": ask
+    "pdf": allow
+    "docx": allow
+    "xlsx": allow
+    "pptx": allow
 ---
 
 ## Responsibilities
@@ -125,7 +125,7 @@ Produces:
    - Verify claim matches source content
    - Check context is not misrepresented
    - Confirm page numbers and details are accurate
-   
+
    **If citation does NOT support claim**:
    - Flag as CRITICAL error
    - Document exact discrepancy

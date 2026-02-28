@@ -10,12 +10,12 @@ permission:
   bash: allow
   webfetch: allow
   skill:
-    "pdf": "allow"
-    "docx": "allow"
-    "xlsx": "allow"
-    "pptx": "allow"
-    "academic-researcher": "allow"
-    "*": "ask"
+    "*": ask
+    "pdf": allow
+    "docx": allow
+    "xlsx": allow
+    "pptx": allow
+    "academic-researcher": allow
 ---
 
 ## Responsibilities

@@ -10,11 +10,11 @@ permission:
   bash: deny
   webfetch: allow
   skill:
-    "docx": "allow"
-    "pptx": "allow"
-    "xlsx": "allow"
-    "pdf": "allow"
-    "*": "ask"
+    "*": ask
+    "docx": allow
+    "pptx": allow
+    "xlsx": allow
+    "pdf": allow
 ---
 
 ## Responsibilities

@@ -25,8 +25,8 @@ permission:       # allow/deny/ask
   bash: deny
   webfetch: ask
   skill:
-    "xxx": "allow" # allow specific skills
-    "*": "allow"   # allow/deny/ask other skills
+    "*": allow   # allow/deny/ask other skills
+    "xxx": allow # allow specific skills
 ---
 
 ## Resposibilities

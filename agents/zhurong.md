@@ -9,9 +9,9 @@ permission:
   bash: deny
   webfetch: ask
   skill:
-    "agent-creator": "allow" # allow specific skills
-    "team-creator": "allow"  # allow specific skills
-    "*": "ask"               # other skills need be ask
+    "*": ask
+    "agent-creator": allow
+    "team-creator": allow
 ---
 
 ## Responsibilities
