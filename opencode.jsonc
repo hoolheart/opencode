@@ -11,4 +11,24 @@
             "*": "allow",
         },
     },
+    "provider": {
+        "ollama": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "Ollama",
+            "options": {
+                "baseURL": "http://ollama.local:12121/v1"
+            },
+            "models": {
+                "glm-5:cloud": {
+                    "name": "glm-5"
+                },
+                "gpt-oss": {
+                    "name": "gpt-oss"
+                },
+                "qwen3.5": {
+                    "name": "qwen3.5"
+                },
+            },
+        },
+    },
 }
