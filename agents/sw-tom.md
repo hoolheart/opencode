@@ -99,17 +99,24 @@ permission:
 **Input**: Detailed design document, test cases, UI design (if applicable)
 
 **Process**:
-1. Set up feature branch using skill({name:"git-workflow"})
-2. Implement code following TDD principles:
+1. **Verify detailed design is approved** (check with sw-prod first)
+2. Set up feature branch using skill({name:"git-workflow"}) - **MUST create before coding**
+3. **Follow Interface-Driven Development**:
+   - If new interfaces are defined in the design, implement them FIRST
+   - Write interfaces in appropriate module (`domain/`, `contracts/`, `interfaces/`)
+   - Implement concrete classes AFTER interfaces are defined
+4. Implement code following TDD principles:
    - Write tests first (or alongside implementation)
    - Implement functionality
    - Refactor while maintaining passing tests
-3. Follow coding standards:
+5. Follow coding standards:
    - Rust: idiomatic Rust with proper error handling
    - Flutter: clean architecture with Material Design
-4. Include comprehensive comments
-5. Self-test until all tests pass
-6. Handle edge cases and errors gracefully
+6. Include comprehensive comments
+7. **Self-test until all tests pass**
+8. Handle edge cases and errors gracefully
+9. **Commit your work** - at least one commit per sub-task
+10. **Push to remote** - MUST push before requesting code review
 
 **Output**: Implemented code with passing self-tests
 
@@ -118,13 +125,15 @@ permission:
 **When**: Implementation and self-testing complete
 
 **Process**:
-1. Commit code using skill({name:"git-workflow"})
-2. Push feature branch
+1. **Verify you have pushed to remote** (check with `git log origin/feature-branch..HEAD`)
+2. If not pushed, **commit and push NOW** using skill({name:"git-workflow"})
 3. Submit for code review to sw-jerry
 4. Address review feedback
 5. Make necessary revisions
-6. Re-commit and re-test
-7. Repeat until code review passes
+6. **Commit and push** revisions
+7. Re-test
+8. Repeat until code review passes
+9. **DO NOT request merge to main until all tests pass**
 
 **Output**: Reviewed and approved code ready for testing
 
@@ -187,15 +196,17 @@ permission:
 - Performance considerations
 - Security best practices
 
-## Git Workflow
+## Git Workflow (STRICT - MUST FOLLOW)
 
 - Use skill({name:"git-workflow"})
-- Create feature branch for each task: `feature/task-description`
-- Commit frequently with clear messages
-- Include test changes in commits
-- Push to remote regularly
-- Merge only after code review and testing pass
-- Keep commits atomic and focused
+- **MANDATORY RULES - Violations will be rejected**:
+  1. **Create feature branch BEFORE starting any development**: `git checkout -b feature/task-description`
+  2. **Commit at least once for each sub-task**: Use atomic commits with clear messages
+  3. **Push to remote BEFORE requesting code review**: `git push -u origin feature/task-description`
+  4. **Commit message format**: Use clear, descriptive messages
+  5. **Merge to main ONLY after all tests pass**
+  6. Keep commits atomic and focused
+- **If you fail to follow these rules, your code review will be rejected**
 
 ## Skills
 
