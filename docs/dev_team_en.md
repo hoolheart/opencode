@@ -1,403 +1,398 @@
-# Product Development Agent Team
+# TDD Agile Development Team Documentation
 
-## Overview
+## 1. Team Composition
 
-This document describes the product development agent team for Rust+Flutter stack projects. The team consists of 7 specialized agents working together to deliver high-quality software products.
-
-## Agent Hierarchy
+### 1.1 Team Architecture Overview
 
 ```mermaid
-flowchart TB
-    subgraph Primary["Primary"]
-        PRODUCT[product agent<br/>PRIMARY]
+graph TB
+    subgraph "TDD Agile Development Team"
+        SWP["sw-prod<br/>Primary Agent / Product Owner"]
+        
+        subgraph "Subagent Team"
+            SWJ["sw-jerry<br/>Software Architect/Designer"]
+            SWT["sw-tom<br/>Software Developer"]
+            SWM["sw-mike<br/>Software Tester"]
+            SWA["sw-anna<br/>UI/UX Designer"]
+        end
     end
-
-    subgraph SubAgents["Sub-agents"]
-        ARCH[architect<br/>SUB]
-        RUST[rust_dev<br/>SUB]
-        FLUTTER[flutter_dev<br/>SUB]
-        TEST[test<br/>SUB]
-        UI[ui_dev<br/>SUB]
-        OPS[ops<br/>SUB]
-    end
-
-    PRODUCT --> ARCH
-    PRODUCT --> RUST
-    PRODUCT --> FLUTTER
-
-    ARCH --> TEST
-    RUST --> TEST
-    FLUTTER --> UI
-    FLUTTER --> TEST
-    UI --> TEST
-
-    PRODUCT --> OPS
-    ARCH -.-> OPS
-    RUST -.-> OPS
-    FLUTTER -.-> OPS
+    
+    User([User]) -.->|Submit Requirements| SWP
+    SWP -->|Assign Tasks| SWJ
+    SWP -->|Assign Tasks| SWT
+    SWP -->|Assign Tasks| SWM
+    SWP -->|Assign Tasks| SWA
+    
+    SWJ <-->|Technical Review| SWT
+    SWT <-->|Testing Coordination| SWM
+    SWA -.->|Design Delivery| SWT
+    
+    SWP -.->|Final Delivery| User
+    
+    style SWP fill:#e1f5fe,stroke:#01579b,stroke-width:3px
+    style SWJ fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    style SWT fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    style SWM fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style SWA fill:#fce4ec,stroke:#880e4f,stroke-width:2px
 ```
 
-## Agent Roles and Responsibilities
+### 1.2 Role Responsibilities
 
-### 1. Product Agent (Primary)
-**Role**: Main orchestrator and project manager
-
-**Responsibilities**:
-- Requirements collection and verification
-- Feasibility verification with architect
-- Product Requirements Document (PRD) creation
-- Architecture design coordination
-- Development plan setup
-- Task distribution and execution management
-- Code review management
-- Final product testing coordination
-- Bug fix coordination
-- Product delivery
-
-**Git Workflow**: Uses `git-workflow` skill for version control operations
-
-### 2. Architect Agent
-**Role**: Software architect and technical decision maker
-
-**Responsibilities**:
-- Architecture design for Rust+Flutter stack
-- Feasibility analysis
-- Task decomposition and interface definition
-- Code review and quality gate
-- **Merge review** (FIRST reviewer during merge)
-- **Design/Code arbitration** when implementation differs from design
-- Conflict arbitration between teams
-
-**Special Feature**:
-- **Merge Review Process**: As the first reviewer, architect compares code with design
-- **Arbitration Rules**:
-  - CHANGE CODE when implementation violates principles
-  - CHANGE DESIGN when code reveals better approach
-- Must document arbitration decisions
-
-**Git Workflow**: Commits design documentation changes with `git-workflow` skill
-
-### 3. Rust Dev Agent
-**Role**: Rust backend development
-
-**Responsibilities**:
-- Write idiomatic, safe Rust code
-- Testing (unit, integration, doctests)
-- Code quality (formatting, clippy, documentation)
-- Debugging and bug fixing
-- Code refactoring
-- FFI integration with Flutter
-- Cross-platform build support (iOS, Android, Desktop)
-
-**Git Workflow Requirements**:
-- **MUST commit before requesting testing**
-- Only commit self-made changes
-- Use Conventional Commits format
-- Follow pre-test commit workflow:
-  ```
-  1. Complete implementation
-  2. Run quality checks (cargo fmt, clippy, test)
-  3. Stage only self-made changes
-  4. Commit with descriptive message
-  5. Call test agent for verification
-  ```
-
-**Commit Message Examples**:
-```bash
-git commit -m "feat(api): add user authentication endpoints"
-git commit -m "fix(ffi): resolve memory leak in string conversion"
-git commit -m "test(models): add unit tests for User entity"
-```
-
-### 4. Flutter Dev Agent
-**Role**: Flutter frontend development
-
-**Responsibilities**:
-- UI implementation and cross-platform development
-- State management and business logic
-- Navigation and routing
-- Testing (widget, unit, integration)
-- Code quality and analysis
-- Performance optimization
-- FFI and Rust integration
-- Localization and accessibility
-
-**Git Workflow Requirements**:
-- **MUST commit before requesting testing**
-- Only commit self-made changes
-- Use Conventional Commits format
-- Follow pre-test commit workflow:
-  ```
-  1. Complete implementation
-  2. Run quality checks (dart format, flutter analyze, flutter test)
-  3. Stage only self-made changes
-  4. Commit with descriptive message
-  5. Call test agent for verification
-  ```
-
-**Collaboration with UI Dev Agent**:
-- Call `ui_dev` agent before implementing new UI features without design specs
-- Review design deliverables before implementation
-- Request `ui_dev` agent review if visual discrepancies found
-
-### 5. UI Dev Agent
-**Role**: UI/UX design and design system creation
-
-**Responsibilities**:
-- Design system creation (colors, typography, spacing)
-- Visual design specifications
-- Design tokens management
-- Component library design
-- Accessibility and UX guidelines
-- **Design documentation** (MUST write for every design task)
-- Design-to-code handoff
-
-**Design Documentation Requirements**:
-- MUST write comprehensive design documentation
-- Document structure:
-  ```
-  docs/design/
-  ├── design-system.md
-  ├── component-library.md
-  ├── design-tokens.md
-  ├── accessibility-guide.md
-  ├── design-decisions.md
-  └── [feature-name]/
-      ├── overview.md
-      ├── user-flows.md
-      ├── screens.md
-      └── interactions.md
-  ```
-
-**Git Workflow for Design**:
-```bash
-# Commit design tokens
-git add docs/design/design-tokens.md lib/theme/
-git commit -m "docs(design): add color and typography tokens"
-
-# Commit component documentation
-git add docs/design/component-library.md
-git commit -m "docs(components): add button and input specifications"
-```
-
-### 6. Test Agent
-**Role**: Black-box testing and quality assurance
-
-**Responsibilities**:
-- **Test case design** (black-box focus)
-- **Test documentation** (MUST write test cases and results)
-- Functional testing
-- Integration testing (FFI)
-- Cross-platform testing
-- Negative testing
-- Regression testing
-- Bug reporting and verification
-
-**Black-Box Testing Principles**:
-- NEVER review source code when designing tests
-- ALWAYS base tests on requirements and specifications
-- FOCUS on what the system should do, not how it does it
-
-**Test Documentation Requirements**:
-- MUST write test case documents before execution
-- MUST write test results documents after testing
-- Document structure:
-  ```
-  docs/testing/
-  ├── test-plans/
-  ├── test-cases/
-  ├── test-results/
-  ├── defects/
-  └── coverage/
-  ```
-
-**Git Workflow for Testing**:
-```bash
-# Commit test cases
-git add docs/testing/test-cases/
-git commit -m "test: add comprehensive test cases for checkout flow"
-
-# Commit test results
-git add docs/testing/test-results/
-git commit -m "test: add test execution results for sprint 4"
-```
-
-### 7. Ops Agent
-**Role**: Build, deployment, and DevOps
-
-**Responsibilities**:
-- Build script creation
-- Package creation (iOS, Android, Web, Desktop)
-- CI/CD pipeline setup
-- Deployment scripts
-- Infrastructure as Code (Docker, Kubernetes)
-- Release management
-
-**Git Workflow**:
-- MUST commit all ops changes
-- Use Conventional Commits with types: `ci`, `build`, `chore`, `feat`, `fix`
-
-**Commit Examples**:
-```bash
-git commit -m "ci: add GitHub Actions workflow"
-git commit -m "build: optimize Rust release build flags"
-git commit -m "feat(deploy): add production deployment script"
-```
-
-## Collaboration Workflows
-
-### Task Lifecycle
-
-```mermaid
-flowchart TD
-    A[1. Assign Task<br/>Development Subagent<br/>rust_dev / flutter_dev / ui_dev] --> B[2. Development Complete]
-    B --> C[3. Commit Changes<br/>rust_dev / flutter_dev only]
-    C --> D[4. Call test subagent<br/>Test implementation]
-    D --> E{5. Test Results}
-    E -->|✅ PASS| F[6. Call architect<br/>Code Review]
-    E -->|❌ FAIL| G[Return to developer<br/>for fixes]
-    G --> C
-
-    F --> H{7. Review Results}
-    H -->|✅ APPROVED| I[Merge task]
-    H -->|❌ CHANGES REQUESTED| J[Return to developer<br/>for changes]
-    J --> C
-
-    I --> K[8. Task Complete<br/>Update project status]
-```
-
-### Merge Review Process
-
-```mermaid
-flowchart TD
-    A[1. Receive merge request<br/>from product agent] --> B[2. Review code changes]
-    B --> C{3. Design/Code<br/>Alignment}
-    C -->|Implementation<br/>matches design| D[✅ APPROVE]
-    C -->|Implementation<br/>differs from design| E[ARBITRATE]
-
-    E --> F{4. ARBITRATION DECISION}
-    F -->|Design is correct| G[Change Code<br/>Request developer<br/>to align with design<br/>Provide guidance]
-    F -->|Code is better| H[Change Design<br/>Update architecture docs<br/>Document rationale<br/>Notify stakeholders<br/>Commit changes]
-
-    G --> |Developer fixes code| B
-    H --> I[5. Final approval<br/>and merge authorization]
-    D --> I
-```
-
-### UI/Flutter Collaboration
-
-```mermaid
-sequenceDiagram
-    participant F as flutter_dev
-    participant U as ui_dev
-    participant T as test
-
-    F->>U: 1. Needs design
-    activate U
-    U->>U: 2. Create design specs
-    U->>U: 3. Commit design documentation
-    U-->>F: Design specifications
-    deactivate U
-
-    F->>F: 4. Review design deliverables
-    F->>F: 5. Implement in Flutter
-    F->>F: 6. Commit implementation
-
-    F->>T: 7. Request verification
-    activate T
-    T->>T: Verify against design specs
-    T-->>F: Verification results
-    deactivate T
-```
-
-### Design/Code Arbitration Rules
-
-**When actual code differs from previous design:**
-
-**CHANGE CODE when:**
-- Implementation violates architectural principles
-- Code introduces unnecessary complexity
-- Implementation breaks established patterns without justification
-- Security or performance requirements are compromised
-- Code doesn't follow agreed interface contracts
-
-**CHANGE DESIGN when:**
-- Implementation reveals design flaws or impractical assumptions
-- Code provides a better architectural approach
-- Implementation is more efficient or maintainable
-- Design was incomplete or missed critical edge cases
-- Technical constraints were underestimated in design
-
-## Git Workflow Integration
-
-All agents use the `git-workflow` skill for:
-- Conventional Commits
-- Branch management
-- Merge operations
-- Commit message standards
-
-### Common Commit Types
-
-| Type | Description | Used By |
-|------|-------------|---------|
-| `feat` | New feature | rust_dev, flutter_dev |
-| `fix` | Bug fix | rust_dev, flutter_dev |
-| `docs` | Documentation | ui_dev, architect, test |
-| `style` | Code style changes | rust_dev, flutter_dev |
-| `refactor` | Code refactoring | rust_dev, flutter_dev |
-| `perf` | Performance improvement | rust_dev, flutter_dev |
-| `test` | Adding tests | rust_dev, flutter_dev, test |
-| `chore` | Build/tooling changes | ops |
-| `ci` | CI/CD changes | ops |
-| `build` | Build system changes | ops |
-
-### Branch Naming Conventions
-
-- Feature branches: `feat/[feature-name]`
-- Bug fixes: `fix/[bug-description]`
-- Documentation: `docs/[documentation-topic]`
-
-## Quality Gates
-
-1. **Requirements Gate**: User-approved PRD
-2. **Architecture Gate**: Architect-approved design
-3. **Development Gate**: Task passes tests
-4. **Review Gate**: Architect-approved code
-5. **System Gate**: Final testing passes
-6. **Delivery Gate**: User acceptance
-
-## Getting Started
-
-1. **Product Agent** starts by collecting requirements
-2. **Architect** verifies feasibility and designs architecture
-3. **Product Agent** coordinates task distribution
-4. **UI Dev** creates design specifications (if needed)
-5. **Flutter Dev / Rust Dev** implement features
-6. **Test Agent** verifies functionality
-7. **Architect** reviews and approves code
-8. **Ops Agent** handles build and deployment
-
-## Communication Guidelines
-
-- **Product Agent** keeps user informed of major milestones
-- **Product Agent** escalates blockers to user promptly
-- **All agents** use `git-workflow` skill for git operations
-- **Developers** commit before requesting testing
-- **UI Dev** commits design documentation
-- **Test Agent** commits test cases and results
-- **Architect** commits design changes when arbitration changes design
-- **Ops Agent** commits CI/CD and deployment configurations
+| Agent | Role | Core Responsibilities | Mode |
+|-------|------|----------------------|------|
+| **sw-prod** | Product Owner / Primary | Requirement clarification, workflow control, final acceptance | Primary |
+| **sw-jerry** | Software Architect/Designer | Architecture design, technical feasibility, task decomposition, code review | Subagent |
+| **sw-tom** | Software Developer | Detailed design, coding, self-testing, architecture doc updates | Subagent |
+| **sw-mike** | Software Tester | Test case design, test execution, quality assurance | Subagent |
+| **sw-anna** | UI/UX Designer | Interface design, interaction design, Material Design style | Subagent |
 
 ---
 
-## Related Documents
+## 2. Overall Workflow
 
-Agent configuration files (in `/agents/` directory):
+### 2.1 Release-Level Workflow
 
-- `/agents/product.md` - Product agent configuration (primary orchestrator)
-- `/agents/architect.md` - Architect agent configuration (design & review)
-- `/agents/rust_dev.md` - Rust development agent configuration (backend)
-- `/agents/flutter_dev.md` - Flutter development agent configuration (frontend)
-- `/agents/ui_dev.md` - UI/UX design agent configuration (design system)
-- `/agents/test.md` - Testing agent configuration (QA)
-- `/agents/ops.md` - Operations agent configuration (CI/CD & deployment)
+```mermaid
+flowchart TD
+    Start([Start]) --> Req[Requirement Reception & Clarification]
+    Req --> Feas[Technical Feasibility Assessment]
+    Feas --> Scope[Scope Confirmation & Release Planning]
+    Scope --> PRD[Create Product Requirement Document<br/>prd.md]
+    PRD --> PRDReview{PRD Review}
+    PRDReview -->|Rejected| PRD
+    PRDReview -->|Approved| Tasks[Task Decomposition<br/>tasks.md]
+    Tasks --> TaskReview{Task Review}
+    TaskReview -->|Rejected| Tasks
+    TaskReview -->|Approved| Plan[Development Planning]
+    
+    Plan --> CheckInitial{Initial Project?}
+    CheckInitial -->|Yes| Arch[Architecture Design<br/>arch.md]
+    CheckInitial -->|No| DevPhase[Development Phase]
+    
+    Arch --> ArchReview{Architecture Review}
+    ArchReview -->|Rejected| Arch
+    ArchReview -->|Approved| Setup[Project Structure Setup]
+    Setup --> EngFiles[Engineering Files Creation]
+    EngFiles --> BuildVerify[Build Verification]
+    BuildVerify --> DevPhase
+    
+    DevPhase --> TaskLoop[Process Each Task]
+    TaskLoop --> AllDone{All Tasks Complete?}
+    AllDone -->|No| SingleTask[Single Task Development Flow]
+    SingleTask --> TaskLoop
+    
+    AllDone -->|Yes| IntegTest[Integration Testing]
+    IntegTest --> IntegPass{Tests Pass?}
+    IntegPass -->|No| FixInteg[Fix Issues]
+    FixInteg --> IntegTest
+    IntegPass -->|Yes| Accept[Final Acceptance]
+    Accept --> UpdateDocs[Update Documents<br/>README.md / arch.md]
+    UpdateDocs --> Deliver[Deliver Results]
+    Deliver --> End([End])
+    
+    style Start fill:#e8f5e9,stroke:#2e7d32
+    style End fill:#ffebee,stroke:#c62828
+    style SWP fill:#e1f5fe,stroke:#01579b
+```
+
+### 2.2 Phase Responsibilities
+
+| Phase | Responsible Agent | Output | Key Checkpoints |
+|-------|------------------|--------|-----------------|
+| Requirement Clarification | sw-prod | Clarified requirements document | All details clear |
+| Feasibility Assessment | sw-jerry | Feasibility report | Technical solution feasible |
+| PRD Creation | sw-prod | `log/release_x/prd.md` | Approved by sw-jerry review |
+| Task Decomposition | sw-jerry | `log/release_x/tasks.md` | Approved by sw-tom review |
+| Architecture Design | sw-jerry | `arch.md` | Approved by sw-tom review |
+| Project Setup | sw-jerry/sw-tom | Engineering files | Build verification passed by sw-mike |
+| Development Execution | sw-prod coordination | Functional code | Follow TDD workflow |
+| Integration Testing | sw-mike | Test report | All tests passed |
+| Final Acceptance | sw-prod | `acceptance.md` | Meets PRD requirements |
+
+---
+
+## 3. Subtask Workflow (Strict TDD Process)
+
+### 3.1 Single Task Development Flow
+
+```mermaid
+flowchart TD
+    subgraph "Single Task Development Flow - Mandatory Sequential Execution"
+        StartTask([Start Task]) --> Step1["Step 1: Test Case Creation<br/>Owner: sw-mike"]
+        Step1 --> TestReview{sw-tom Review}
+        TestReview -->|Rejected| Step1
+        TestReview -->|Approved| Step2["Step 2: Detailed Design<br/>Owner: sw-tom"]
+        
+        Step2 --> DesignContent["Design Contents:"]
+        DesignContent --> UML["UML Diagrams (Mermaid)"]
+        UML --> Interface["Interface Definitions<br/>Follow DIP"]
+        Interface --> UI["UI Design<br/>sw-anna support (when required)"]
+        
+        UI --> DesignReview{sw-jerry Review}
+        DesignReview -->|Rejected| Step2
+        DesignReview -->|Approved| Step3["Step 3: Implementation<br/>Owner: sw-tom"]
+        
+        Step3 --> GitBranch["Create Feature Branch<br/>feature/task-xxx"]
+        GitBranch --> Implement["Implement per Design"]
+        Implement --> SelfTest["Self-test Until Pass"]
+        SelfTest --> Commit["Commit Code<br/>At least once per sub-task"]
+        Commit --> Push["Push to Remote Repository"]
+        
+        Push --> Step4["Step 4: Code Review<br/>Owner: sw-jerry"]
+        Step4 --> CodeReview{Review Result}
+        CodeReview -->|Rejected| FixCode[Fix Issues] --> Push
+        CodeReview -->|Approved| Step5["Step 5: Test Execution<br/>Owner: sw-mike"]
+        
+        Step5 --> RunTest["Execute Test Cases"]
+        RunTest --> TestResult{Test Result}
+        TestResult -->|Failed| FixBug[Fix Bugs] --> Push
+        TestResult -->|Passed| Complete[Task Complete]
+        
+        Complete --> EndTask([End Task])
+    end
+    
+    style StartTask fill:#e8f5e9,stroke:#2e7d32
+    style EndTask fill:#ffebee,stroke:#c62828
+    style Step1 fill:#fff3e0,stroke:#e65100
+    style Step2 fill:#e3f2fd,stroke:#1565c0
+    style Step3 fill:#e8f5e9,stroke:#2e7d32
+    style Step4 fill:#fce4ec,stroke:#880e4f
+    style Step5 fill:#fff3e0,stroke:#e65100
+    style Complete fill:#e8f5e9,stroke:#1b5e20,stroke-width:3px
+```
+
+### 3.2 Task Collaboration Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User as User
+    participant Prod as sw-prod
+    participant Mike as sw-mike
+    participant Tom as sw-tom
+    participant Anna as sw-anna
+    participant Jerry as sw-jerry
+    
+    User->>Prod: Submit Development Requirements
+    
+    rect rgb(255, 243, 224)
+        Note over Prod,Mike: Step 1: Test Case Creation
+        Prod->>Mike: Assign test case design task
+        Mike->>Mike: Analyze requirements, design test cases
+        Mike->>Tom: Submit test cases for review
+        Tom->>Mike: Feedback review comments
+        Mike->>Prod: Test cases approved
+    end
+    
+    rect rgb(227, 242, 253)
+        Note over Prod,Tom: Step 2: Detailed Design
+        Prod->>Tom: Assign detailed design task
+        
+        alt UI Design Required
+            Tom->>Anna: Request UI design support
+            Anna->>Anna: Create UI design
+            Anna->>Tom: Deliver design assets
+        end
+        
+        Tom->>Tom: Create detailed design<br/>UML + Interface definitions
+        Tom->>Jerry: Submit design review
+        Jerry->>Tom: Feedback review comments
+        Tom->>Prod: Detailed design approved
+    end
+    
+    rect rgb(232, 245, 233)
+        Note over Prod,Tom: Step 3: Implementation
+        Prod->>Tom: Start coding implementation
+        Tom->>Tom: Create feature branch
+        Tom->>Tom: Interface first, then implementation
+        Tom->>Tom: Self-test until pass
+        Tom->>Tom: Commit and push code
+        Tom->>Prod: Coding complete
+    end
+    
+    rect rgb(252, 228, 236)
+        Note over Prod,Jerry: Step 4: Code Review
+        Prod->>Jerry: Request code review
+        Jerry->>Jerry: Review code quality
+        
+        alt Issues Found
+            Jerry->>Tom: Feedback issue list
+            Tom->>Tom: Fix issues
+            Tom->>Jerry: Resubmit for review
+        end
+        
+        Jerry->>Prod: Code review passed
+    end
+    
+    rect rgb(255, 243, 224)
+        Note over Prod,Mike: Step 5: Test Execution
+        Prod->>Mike: Execute tests
+        Mike->>Mike: Run test cases
+        
+        alt Tests Failed
+            Mike->>Tom: Report defects
+            Tom->>Tom: Fix defects
+            Tom->>Mike: Retest
+        end
+        
+        Mike->>Prod: All tests passed
+    end
+    
+    Prod->>User: Task completion delivery
+```
+
+### 3.3 Workflow Enforcement Rules
+
+```mermaid
+flowchart LR
+    subgraph "Mandatory Enforcement Checkpoints"
+        A["Step 1 Complete<br/>Test Cases Approved"] -->|Check Passed| B["Step 2 Complete<br/>Detailed Design Approved"]
+        B -->|Check Passed| C["Step 3 Complete<br/>Code Committed & Pushed"]
+        C -->|Check Passed| D["Step 4 Complete<br/>Code Review Passed"]
+        D -->|Check Passed| E["Step 5 Complete<br/>All Tests Passed"]
+        E --> F["✓ Task Complete"]
+        
+        A -.->|Failed| Stop1["✗ STOP<br/>Improve Test Cases"]
+        B -.->|Failed| Stop2["✗ STOP<br/>Improve Detailed Design"]
+        C -.->|Failed| Stop3["✗ STOP<br/>Create Branch & Commit"]
+        D -.->|Failed| Stop4["✗ STOP<br/>Fix Code Issues"]
+        E -.->|Failed| Stop5["✗ STOP<br/>Fix Defects"]
+    end
+    
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Stop1 fill:#ffcdd2,stroke:#c62828
+    style Stop2 fill:#ffcdd2,stroke:#c62828
+    style Stop3 fill:#ffcdd2,stroke:#c62828
+    style Stop4 fill:#ffcdd2,stroke:#c62828
+    style Stop5 fill:#ffcdd2,stroke:#c62828
+```
+
+---
+
+## 4. Git Workflow Standards
+
+### 4.1 Branch Strategy
+
+```mermaid
+flowchart TD
+    subgraph "Git Workflow"
+        Main["main<br/>Master Branch"]
+        
+        Main --> Feature1["feature/task-001<br/>Feature Branch"]
+        Main --> Feature2["feature/task-002<br/>Feature Branch"]
+        Main --> FeatureN["feature/task-nnn<br/>Feature Branch"]
+        
+        Feature1 --> Commit1["Commit 1"]
+        Commit1 --> Commit2["Commit 2"]
+        Commit2 --> Push1["Push to Remote"]
+        Push1 --> Review1["Code Review"]
+        Review1 --> Test1["Tests Pass"]
+        Test1 --> Merge1["Merge to main"]
+        
+        Feature2 --> Commit3["Commit 1"]
+        Commit3 --> Push2["Push to Remote"]
+        Push2 --> Review2["Code Review"]
+        Review2 --> Test2["Tests Pass"]
+        Test2 --> Merge2["Merge to main"]
+        
+        Merge1 & Merge2 --> Release["release/x<br/>Release Branch"]
+        Release --> IntegTest["Integration Testing"]
+        IntegTest --> MergeMain["Merge Back to main"]
+        MergeMain --> Tag["Tag Release"]
+    end
+    
+    style Main fill:#e1f5fe,stroke:#01579b,stroke-width:3px
+    style Tag fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px
+```
+
+### 4.2 Git Mandatory Rules
+
+| Rule | Description | Violation Consequence |
+|------|-------------|----------------------|
+| **Must Create Feature Branch** | Each task must create `feature/task-description` branch | Code review will be rejected |
+| **Must Atomic Commit** | At least one commit per sub-task | Code review will be rejected |
+| **Must Push Remote** | Must push to remote before code review | Code review will be rejected |
+| **Must Pass Tests** | Must pass all tests before merging to main | Merge prohibited |
+| **Main Branch Protection** | Can only merge via PR, no direct commits | Operation rejected |
+
+---
+
+## 5. Documentation Output Standards
+
+### 5.1 Documentation Directory Structure
+
+```
+project/
+├── arch.md                          # Architecture design document
+├── README.md                        # Project README
+├── log/
+│   └── release_0/                   # Release log directory
+│       ├── prd.md                   # Product requirements document
+│       ├── tasks.md                 # Task decomposition document
+│       ├── acceptance.md            # Acceptance report
+│       ├── test/                    # Test related documents
+│       │   ├── test_cases_task_001.md
+│       │   ├── test_results_task_001.md
+│       │   └── integration_test.md
+│       ├── design/                  # Detailed design documents
+│       │   └── design_task_001.md
+│       ├── review/                  # Code review records
+│       │   └── review_task_001.md
+│       └── ui/                      # UI design documents
+│           ├── design_spec.md
+│           └── assets/
+```
+
+### 5.2 Document Language Standards
+
+- **Consistent with user input**: If user inputs in Chinese, all documents in Chinese; if user inputs in English, all documents in English
+- **Technical diagrams**: Use Mermaid syntax
+- **API documentation**: Must include request/response examples
+
+---
+
+## 6. Technology Stack Preferences (Non-mandatory)
+
+| Layer | Preferred Technology | Rationale |
+|-------|---------------------|-----------|
+| Backend/Embedded | Rust | Performance and safety |
+| Frontend | Flutter | Cross-platform UI development |
+| UI Style | Material Design | Light/dark theme support |
+| Architecture | Frontend-Backend Separation | Scalability |
+| Version Control | Git | main + feature branches |
+
+> **Note**: sw-jerry should select the optimal technology stack based on specific project requirements and user preferences, documenting the rationale.
+
+---
+
+## 7. Key Success Factors
+
+```mermaid
+flowchart TD
+    subgraph "TDD Agile Development Success Factors"
+        direction TB
+        
+        A["Strict TDD Process<br/>Tests First"] --> Success["High Quality Delivery"]
+        B["Clear Interface Design<br/>Dependency Inversion"] --> Success
+        C["Continuous Code Review<br/>Quality Gates"] --> Success
+        D["Complete Test Coverage<br/>Automated Validation"] --> Success
+        E["Standardized Git Workflow<br/>Version Management"] --> Success
+        F["Agile Iterative Development<br/>Rapid Feedback"] --> Success
+        
+        Success --> Goal["Working Software"]
+    end
+    
+    style Success fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style Goal fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+```
+
+---
+
+## 8. Communication and Collaboration Principles
+
+1. **Clear Requirements**: sw-prod must ensure all requirement details are clear and unambiguous
+2. **Design First**: Interface definitions and detailed design must be completed before coding
+3. **Test-Driven**: Test cases must be completed and reviewed before coding
+4. **Continuous Integration**: Frequent commits to maintain a healthy codebase
+5. **Quality Gates**: Each phase must pass review before entering the next phase
+6. **User Confirmation**: Key milestones (PRD, task list) must obtain explicit user confirmation
