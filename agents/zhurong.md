@@ -8,10 +8,7 @@ permission:
   edit: deny
   bash: deny
   webfetch: ask
-  skill:
-    "*": ask
-    "agent-creator": allow
-    "team-creator": allow
+  skill: allow
 ---
 
 ## Responsibilities

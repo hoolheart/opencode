@@ -8,12 +8,7 @@ permission:
   edit: allow
   bash: deny
   webfetch: ask
-  skill:
-    "*": ask
-    "docx": allow
-    "pptx": allow
-    "xlsx": allow
-    "pdf": allow
+  skill: allow
 ---
 
 ## Personality

@@ -9,11 +9,7 @@ permission:
   bash: deny
   webfetch: allow
   websearch: allow
-  skill:
-    "*": ask
-    "frontend-design": allow
-    "algorithmic-art": allow
-    "brainstorming": allow
+  skill: allow
 ---
 
 ## Responsibilities

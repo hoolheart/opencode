@@ -10,13 +10,7 @@ permission:
   bash: allow
   webfetch: allow
   websearch: allow
-  skill:
-    "*": ask
-    "git-workflow": allow
-    "planning-with-files": allow
-    "writing-plans": allow
-    "test-driven-development": allow
-    "requesting-code-review": allow
+  skill: allow
 ---
 
 ## Responsibilities

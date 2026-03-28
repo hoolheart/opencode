@@ -9,10 +9,7 @@ permission:
   bash: deny
   webfetch: allow
   websearch: allow
-  skill:
-    "*": ask
-    "doc-coauthoring": allow
-    "writing-skills": allow
+  skill: allow
 ---
 
 ## Responsibilities

@@ -9,13 +9,7 @@ permission:
   edit: allow
   bash: allow
   webfetch: allow
-  skill:
-    "*": ask
-    "pdf": allow
-    "docx": allow
-    "xlsx": allow
-    "pptx": allow
-    "academic-researcher": allow
+  skill: allow
 ---
 
 ## Responsibilities

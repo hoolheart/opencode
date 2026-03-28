@@ -9,8 +9,7 @@ permission:
   edit: allow
   bash: deny
   webfetch: allow
-  skill:
-    "*": ask
+  skill: allow
 ---
 
 ## Responsibilities

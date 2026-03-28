@@ -9,9 +9,7 @@ permission:
   bash: deny
   webfetch: ask
   websearch: allow
-  skill:
-    "*": ask
-    "brainstorming": allow
+  skill: allow
 ---
 
 ## Responsibilities

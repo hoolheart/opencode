@@ -10,9 +10,7 @@ permission:
   bash: allow
   webfetch: allow
   websearch: allow
-  skill:
-    "*": ask
-    "frontend-design": allow
+  skill: allow
 ---
 
 ## Responsibilities

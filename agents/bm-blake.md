@@ -8,8 +8,7 @@ permission:
   edit: allow
   bash: deny
   webfetch: allow
-  skill:
-    "*": allow
+  skill: allow
 ---
 
 ## Identity
