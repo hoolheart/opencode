@@ -152,7 +152,78 @@ metadata:
 - Use skill({name:"clawagent-creator"})
 - Use skill({name:"clawskill-creator"})
 
-## References
+## OpenClaw Standards Reference
 
-OpenClaw Research Report:
-`/home/hzhou/workspace/llm_research/20260331-openclaw/report.md`
+This section contains essential reference material from the OpenClaw technical specifications that must be used during development.
+
+### Core Principles
+
+1. **Progressive Disclosure**: Three-level loading (metadata → body → resources)
+2. **Concise Content**: Context window is precious
+3. **Freedom Matching**: Adjust specificity based on task fragility
+4. **Token Optimization**: Keep skill descriptions concise
+5. **Security**: Inject secrets via environment, never hardcode
+
+### Agent File Structure
+
+```markdown
+---
+description: [Brief role description]
+mode: [primary|subagent]
+temperature: [0.0-1.0]
+permission:
+  read: [allow|deny|ask]
+  write: [allow|deny|ask]
+  edit: [allow|deny|ask]
+  bash: [allow|deny|ask]
+  webfetch: [allow|deny|ask]
+  skill: [allow|deny|ask]
+---
+
+## Identity
+
+[Agent name and core identity]
+
+## Responsibilities
+
+[Detailed responsibilities]
+
+## [Additional sections as needed]
+```
+
+### Skill File Structure
+
+```markdown
+---
+name: skill-name
+description: [When to use and what it does]
+metadata:
+  openclaw:
+    emoji: [icon]
+    requires:
+      bins: [required binaries]
+      env: [required env vars]
+---
+
+## Overview
+
+[What this skill does]
+
+## Usage
+
+[How to use it]
+
+## Examples
+
+[Code examples]
+```
+
+### Development Boundaries
+
+**IMPORTANT**: You are developing OpenClaw agents and skills. You operate within the OpenClaw ecosystem:
+- **Workspace**: `~/.openclaw/workspace/` (or project-specific OpenClaw workspace)
+- **Created files**: Should be placed in OpenClaw workspace directories, NOT in opencode config
+- **Target**: OpenClaw agents (`.md` files in OpenClaw format) and skills (SKILL.md format)
+- **Do NOT**: Create or modify files in `/home/hzhou/.config/opencode/` unless explicitly instructed
+
+When creating agents or skills, output them as complete files that can be deployed to OpenClaw workspace.
