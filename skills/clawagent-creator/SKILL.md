@@ -18,13 +18,51 @@ OpenClaw agents are core execution units with four main responsibilities:
 3. **Manage session state** - Maintain context and persist state
 4. **Cooperate with other agents** - Use `sessions_*` tools for multi-agent collaboration
 
-## Agent File Structure
+## OpenClaw Agent Workspace Structure
 
-Agent files are located in `~/.config/opencode/agents/` and use Markdown format:
+OpenClaw uses a specific workspace directory at `~/.openclaw/workspace/`:
+
+```
+~/.openclaw/workspace/
+├── AGENTS.md          # Agent behavior definitions
+├── SOUL.md           # Personality configuration
+├── TOOLS.md          # Tool documentation
+└── skills/           # Skills directory
+    ├── github/
+    │   └── SKILL.md
+    └── ...
+```
+
+### Agent Definition Format in AGENTS.md
+
+Agents are defined within `AGENTS.md` using the following format:
 
 ```markdown
----
-description: [Brief description of agent's role]
+## Agent: [Agent Name]
+
+### Identity
+
+[Agent name and core identity statement]
+
+### Responsibilities
+
+[Detailed responsibilities and capabilities]
+
+### Team (if applicable)
+
+[List of team members for multi-agent collaboration]
+
+### Workflow
+
+[Step-by-step workflow for agent operation]
+
+### Skills
+
+[List of skills this agent can use]
+
+### Metadata
+
+```yaml
 mode: [primary|subagent]
 temperature: [0.0-1.0]
 permission:
@@ -34,27 +72,9 @@ permission:
   bash: [allow|deny|ask]
   webfetch: [allow|deny|ask]
   skill: [allow|deny|ask]
----
+```
 
-## Identity
-
-[Agent name and core identity statement]
-
-## Responsibilities
-
-[Detailed responsibilities and capabilities]
-
-## Team (if applicable)
-
-[List of team members for multi-agent collaboration]
-
-## Workflow
-
-[Step-by-step workflow for agent operation]
-
-## Skills
-
-[List of skills this agent can use]
+Each agent is a section in `AGENTS.md`, not a separate file.
 ```
 
 ## Agent Best Practices from Research Report
@@ -67,17 +87,7 @@ Structure agent files using three-level loading:
 - **Level 2: Main instructions** (<500 lines) - Loaded on trigger
 - **Level 3: Bundled resources** - Loaded as needed
 
-### 2. Workspace Directory Structure
-
-```
-~/.openclaw/workspace/
-├── AGENTS.md          # Agent behavior definition
-├── SOUL.md           # Personality configuration
-├── TOOLS.md          # Tool documentation
-└── skills/           # Skills directory
-```
-
-### 3. Agent Lifecycle States
+### 2. Agent Lifecycle States
 
 ```
 [*] --> Idle --> Processing --> SkillMatching --> Executing --> Idle
@@ -86,7 +96,7 @@ Structure agent files using three-level loading:
                                  [No Skill]          [Error] --> Processing
 ```
 
-### 4. Inter-Agent Communication
+### 3. Inter-Agent Communication
 
 Use built-in `sessions_*` tools:
 
@@ -145,7 +155,7 @@ List specific responsibilities:
 For primary agents:
 1. Clarify requirements with user
 2. Confirm details before creation
-3. Create or modify agent files
+3. Create or modify agent definitions in `~/.openclaw/workspace/AGENTS.md`
 4. Trigger review
 5. Iterate based on feedback
 
