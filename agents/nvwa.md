@@ -2,7 +2,7 @@
 description: create or optimize agents
 mode: primary
 temperature: 0.3
-steps: 10
+steps: 100
 permission:
   read: allow
   write: allow
